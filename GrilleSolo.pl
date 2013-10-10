@@ -1,28 +1,6 @@
-/*Miscellaneous functions*/
-replace([_|T], 0, X, [X|T]).
-replace([H|T], I, X, [H|R]):- I > 0, I1 is I-1, replace(T, I1, X, R).
-imprimerGrille :- champJeu(D), print(D).
-imprimerDC :- dernierCoup(X,Y), print(X), print(','), print(Y).
+:- [main].
 
-/*Initialization*/
-:- asserta(champJeu([[1,0,2,0,0,0,0,0,0],[1,4,5,4,0,2,6,7,1],[0,0,0,0,0,0,0,0,0],
-			[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],
-			[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,1]])).
-
-/*First one checks if one can play in (N,M), then if possible it's done*/
-/*Do not check if the player is supposed to play in this grid (depends on dernierCoup))*/
-jouerCoup(N,M,J) :- champJeu(D), nth0(N,D,X), nth0(M,X,Y), Y \= 1, Y \= 2, /*check that not already played*/
-					replace(X,M,J,NewX),replace(D,N,NewX,NewD), retract(champJeu(D)), assert(champJeu(NewD)), /*updates grid*/
-					asserta(dernierCoup(N,M)).
-
-
-%On retourne dans W l'état de la grille N. 0 si pas gagnée mais pas pleine, 
-%1 si gagnée par joueur 1, 2 si gagnée par 2, 3 si pleine et non gagnée'
-%V est la liste des cases gagnantes
-
-etatGrille(N,W,V):- champJeu(D), nth0(N,D,G),nth0(0,G,A1),nth0(1,G,B2),nth0(2,G,C3),nth0(3,G,D4),nth0(4,G,E5),nth0(5,G,F6),nth0(6,G,G7),nth0(7,G,H8),nth0(8,G,I9),
-gagnee(A1,B2,C3,D4,E5,F6,G7,H8,I9,V,W),!.  %;pleine(G,W),W==3,!)
-
+/*pleine vérifie que la grille ne soit pas pleine, et renvoit 3 si elle l'est, 0 sinon*/
 pleine([],W) :- W = 3.
 pleine([C|G],W) :- C \== 0, pleine(G,W).
 
@@ -39,7 +17,18 @@ gagnee(A,B,C,D,E,F,G,H,I,[],W):-pleine([A,B,C,D,E,F,G,H,I],W),!. % si elle n'est
 gagnee(_,_,_,_,_,_,_,_,_,[],0) :- !.
 
 
-%SI gagne(A,B,C), W est la liste des cases gagnées
+
+/*On retourne dans W l'état de la grille N. 0 si pas gagnée mais pas pleine, 
+1 si gagnée par joueur 1, 2 si gagnée par 2, 3 si pleine et non gagnée'
+V est la liste des cases gagnantes*/
+
+etatGrille(G,W,V):- nth0(0,G,A1),nth0(1,G,B2),nth0(2,G,C3),nth0(3,G,D4),nth0(4,G,E5),nth0(5,G,F6),nth0(6,G,G7),nth0(7,G,H8),nth0(8,G,I9),
+gagnee(A1,B2,C3,D4,E5,F6,G7,H8,I9,V,W),!.  %;pleine(G,W),W==3,!)
+
+%Donne l'état de la grille numéro N dans le champJeu'
+etatGrilleChamp(N,W,V):-champJeu(D), nth0(N,D,G), etatGrille(G,W,V),!.
+
+/*SI gagne(A,B,C), W est la liste des cases gagnées*/
 
 
 
