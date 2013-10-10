@@ -42,6 +42,10 @@ gagnee(_,_,_,_,_,_,_,_,_,[],0) :- !.
 %SI gagne(A,B,C), W est la liste des cases gagnées
 
 
-vaGagner(N,I). %I est le nombre de coup restants avant de gagner, N le numéro de la grille
+
+%vaGagner(N,J,I). %I est le nombre de coup restants avant de gagner, N le numéro de la grille, J le joueur à qui on s'interesse
+
+%vaGagner(N,J,I) :- champJeu(D),nth0(N,D,G),
+%:- 
 
 :-asserta(vecteurEtatGrilles([0,0,0,0,0,0,0,0,0])).
