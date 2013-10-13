@@ -1,4 +1,5 @@
 :- ['GrilleSolo.pl'].
+:- ['Champ.pl'].
 
 /*Miscellaneous functions*/
 

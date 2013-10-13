@@ -1,5 +1,3 @@
-:- ['GrilleSolo'].
-
 /*On retourne dans W l'état du champ. 0 si pas gagnée mais pas plein, 
 1 si gagné par joueur 1, 2 si gagné par 2, 3 si plein et non gagné'
 V est la liste des grilles gagnantes*/
