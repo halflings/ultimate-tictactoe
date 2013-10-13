@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import itertools
+
 # RAW_BOARD = [ [0, 1, 0, 1, 2, 1, 0, 0, 1], [0, 1, 0, 1, 2, 1, 0, 0, 1], [0, 1, 0, 1, 2, 1, 0, 0, 1],
 #               [0, 1, 0, 1, 2, 1, 0, 0, 1], [0, 1, 0, 1, 2, 1, 0, 0, 1], [0, 1, 0, 1, 2, 1, 0, 0, 1],
 #               [0, 1, 0, 1, 2, 1, 0, 0, 1], [0, 1, 0, 1, 2, 1, 0, 0, 1], [0, 1, 0, 1, 2, 1, 0, 0, 1] ]
@@ -14,7 +16,7 @@ RAW_BOARD = [ [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0
               [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0] ]
 
 
-def reformat_board(raw_board):
+def split_boards(raw_board):
     result = [[0 for i in xrange(3)] for j in xrange(3)]
 
     for n, subboard in enumerate(raw_board):
@@ -23,10 +25,13 @@ def reformat_board(raw_board):
     
     return result
 
+def merge_boards(board):
+    board = reduce(list.__add__, board)
+    return [reduce(list.__add__, sb) for sb in board]
 
-BOARD = reformat_board(RAW_BOARD)
+BOARD = split_boards(RAW_BOARD)
 
-# After 'reformat_board', the board looks like this:
+# After 'split_boards', the board looks like this:
 # BOARD = [ [ [[0, 1, 0], [1, 2, 1], [0, 0, 1]], [[0, 1, 0], [1, 2, 1], [0, 0, 1]], [[0, 1, 0], [1, 2, 1], [0, 0, 1]] ],
 #           [ [[0, 1, 0], [1, 2, 1], [0, 0, 1]], [[0, 1, 0], [1, 2, 1], [0, 0, 1]], [[0, 1, 0], [1, 2, 1], [0, 0, 1]] ],
 #           [ [[0, 1, 0], [1, 2, 1], [0, 0, 1]], [[0, 1, 0], [1, 2, 1], [0, 0, 1]], [[0, 1, 0], [1, 2, 1], [0, 0, 1]] ] ]
