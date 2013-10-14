@@ -25,6 +25,16 @@ imprimerGS :- gridsState(G), print(G).
 /*:- asserta(gridsState([0,0,0,0,0,0,0,0,0])).*/
 /*:- asserta(dernierCoup(-1,-1,-1)).*/
 
+/* IA functions */
+
+/*Basic IA to give Python GUI a try, just plays somewhere it can play*/
+/*Won't work if the first playable grid is full*/
+calculerProchainCoup(N,M,J) :- nextPlayer(J), trouverGrilleJouable(N), trouverCaseJouable(N,M,1).
+trouverGrilleJouable(N) :- getGridsState(State), allowedGrids(Al,State), nth0(0,Al,N).
+/*Called with N, and I=1, to fill M*/
+trouverCaseJouable(N,M,I) :- I < 10, champJeu(D), nth1(N,D,X), nth1(I,X,Y), Y = 0, M is I. 
+trouverCaseJouable(N,M,I) :- I < 10, champJeu(D), nth1(N,D,X), nth1(I,X,Y), Y \= 0, I1 is I+1, trouverCaseJouable(N,M,I1). 
+
 /*****************/
 /* MAIN FUNCTIONS*/
 
@@ -37,12 +47,12 @@ nextPlayer(X) :- dernierCoup(_,_,P), P > 0, X is 3-P.
 
 getGridsState(X) :- etatGrilleChamp(1,X1,_),etatGrilleChamp(2,X2,_),etatGrilleChamp(3,X3,_),etatGrilleChamp(4,X4,_),etatGrilleChamp(5,X5,_),etatGrilleChamp(6,X6,_),etatGrilleChamp(7,X7,_),etatGrilleChamp(8,X8,_),etatGrilleChamp(9,X9,_), append([],[X1,X2,X3,X4,X5,X6,X7,X8,X9],X). /*a remplacer par la fonction de Champ quand elle marchera.*/
 
-/*jouerCoup(N,M,J) :- champJeu(D), nth1(N,D,X), nth1(M,X,Y), Y \= 1, Y \= 2, *//*checks that location not already played*/
-/*					nextPlayer(J), *//*check that the player is the good one */
-/*					allowedGrids(Al), member(N,Al),*/ /*checks that the grid is allowed*/
-/*					replace(X,M,J,NewX),replace(D,N,NewX,NewD), retract(champJeu(D)), assert(champJeu(NewD)), *//*updates grid*/
-/*					dernierCoup(A,B,C), retract(dernierCoup(A,B,C)), asserta(dernierCoup(N,M,J)), */ /*updates dernierCoup*/
-/*					etatGrilleChamp(N,E,_), gridsState(G), replace(G,N,E,NewGridsState), retract(gridsState(G)), assert(gridsState(NewGridsState)),
-					print('Le prochain coup doit etre joue en '), allowedGrids(L), print(L), print(', par le joueur '), nextPlayer(NP), print(NP). */
+jouerCoup(N,M,J) :- champJeu(D), nth1(N,D,X), nth1(M,X,Y), Y \= 1, Y \= 2, /*checks that location not already played*/
+					nextPlayer(J), /*check that the player is the good one */
+					getGridsState(State), allowedGrids(Al,State), member(N,Al), /*checks that the grid is allowed*/
+					replace(X,M,J,NewX),replace(D,N,NewX,NewD), retract(champJeu(D)), assert(champJeu(NewD)), /*updates grid*/
+					dernierCoup(A,B,C), retract(dernierCoup(A,B,C)), asserta(dernierCoup(N,M,J)).  /*updates dernierCoup*/
+					/*print('Le prochain coup doit etre joue en '), allowedGrids(L), print(L), print(', par le joueur '), nextPlayer(NP), print(NP).*/ 
 
-:- getGridsState(X), allowedGrids(Al,X), print(X), print(','), print(Al).
+:- calculerProchainCoup(N,M,J), jouerCoup(N,M,J). /*the AI plays*/
+:- champJeu(Ch), getGridsState(X), allowedGrids(Al,X), print(Ch), print(' '), print(Al), print(' '), print(X). /*the result is sent*/
