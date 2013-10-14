@@ -1,37 +1,54 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import itertools
+from subprocess import Popen, PIPE, STDOUT
+import json
 
-# RAW_BOARD = [ [0, 1, 0, 1, 2, 1, 0, 0, 1], [0, 1, 0, 1, 2, 1, 0, 0, 1], [0, 1, 0, 1, 2, 1, 0, 0, 1],
-#               [0, 1, 0, 1, 2, 1, 0, 0, 1], [0, 1, 0, 1, 2, 1, 0, 0, 1], [0, 1, 0, 1, 2, 1, 0, 0, 1],
-#               [0, 1, 0, 1, 2, 1, 0, 0, 1], [0, 1, 0, 1, 2, 1, 0, 0, 1], [0, 1, 0, 1, 2, 1, 0, 0, 1] ]
 
-# RAW_BOARD = [ [0, 0, 0, 0, 1, 0, 0, 0, 0], [0, 2, 0, 0, 0, 0, 0, 1, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
-#               [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 2, 0, 0, 0, 0, 0], [1, 2, 0, 0, 0, 0, 0, 1, 0],
-#               [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 2, 0, 0, 0, 0, 0, 2, 2], [0, 0, 0, 0, 0, 0, 0, 0, 0] ] 
+def format_board(raw_board):
+    result = [[0 for i in xrange(3)] for j in xrange(3)]
+
+    for n, grid in enumerate(raw_board):
+        x, y = n % 3, n / 3
+        result[x][y] = [grid[i*3:(i+1)*3] for i in xrange(3)]
+    
+    return result
+
+def serialize_board(board):
+    board = reduce(list.__add__, board)
+    return [reduce(list.__add__, sb) for sb in board]
+
 
 RAW_BOARD = [ [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
               [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
               [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0] ]
+PLAYABLE = [(i,j) for i in xrange(3) for j in xrange(3)]
+STATE = [0 for i in xrange(9)]
+BOARD = format_board(RAW_BOARD)
 
 
-def split_boards(raw_board):
-    result = [[0 for i in xrange(3)] for j in xrange(3)]
+def serialize_state(board, grid_n, cell_n, last_player):
+    ser = str()
+    ser += ':- asserta(champJeu({})).\n'.format(json.dumps(serialize_board(board)))
+    ser += ':- asserta(dernierCoup({}, {}, {})).'.format(grid_n, cell_n, last_player)
+    return ser
 
-    for n, subboard in enumerate(raw_board):
-        x, y = n % 3, n / 3
-        result[x][y] = [subboard[i*3:(i+1)*3] for i in xrange(3)]
-    
-    return result
+def ai_call(grid_n, cell_n, last_player):
+    with open('input.pl', 'w') as input_file:
+        input_file.write(serialize_state(BOARD, grid_n, cell_n, last_player))
 
-def merge_boards(board):
-    board = reduce(list.__add__, board)
-    return [reduce(list.__add__, sb) for sb in board]
 
-BOARD = split_boards(RAW_BOARD)
+    proc_call = Popen(['prolog', '<', 'main.pl'], stdout=PIPE, stderr=STDOUT)
+    output = proc_call.communicate()
+    print 'OUTPUT =', output
+    output_tokens = output[0].strip().split(' ')
+    board = json.loads(output_tokens[0])
+    playable_grids = [((i-1) / 3, (i-1) % 3) for i in json.loads(output_tokens[1])]
+    won_grids = json.loads(output_tokens[2])
+    return dict(board=board, playable=playable_grids, state=won_grids)
 
-# After 'split_boards', the board looks like this:
+
+# After 'format_board', the board looks like this:
 # BOARD = [ [ [[0, 1, 0], [1, 2, 1], [0, 0, 1]], [[0, 1, 0], [1, 2, 1], [0, 0, 1]], [[0, 1, 0], [1, 2, 1], [0, 0, 1]] ],
 #           [ [[0, 1, 0], [1, 2, 1], [0, 0, 1]], [[0, 1, 0], [1, 2, 1], [0, 0, 1]], [[0, 1, 0], [1, 2, 1], [0, 0, 1]] ],
 #           [ [[0, 1, 0], [1, 2, 1], [0, 0, 1]], [[0, 1, 0], [1, 2, 1], [0, 0, 1]], [[0, 1, 0], [1, 2, 1], [0, 0, 1]] ] ]
@@ -61,8 +78,8 @@ def print_board(board, x=-1, y=-1):
         for l in xrange(3):
             print ' {} #'.format(j if l == 1 else ' '),
 
-            for i, subboard in enumerate(boards_line):
-                print '|'.join(SYMBOL[val] for val in subboard[l]),
+            for i, grid in enumerate(boards_line):
+                print '|'.join(SYMBOL[val] for val in grid[l]),
                 print '#' if i in {y - 1, y} and j == x else '|',
             print ''
         
@@ -88,7 +105,7 @@ def play(miniboard, player):
     valid_move = False
     while not valid_move:
         x, y = get_coords('Quelle case souhaitez vous jouer?')
-        valid_move = miniboard[x][y] == 0
+        valid_move = miniboard[x][y] == 0 and STATE[x * 3 + y + 1] == 0
         if not valid_move:
             print '* Case déjà occupée! Veuillez choisir une autre case.\n'    
     miniboard[x][y] = player
@@ -113,24 +130,37 @@ if __name__ == '__main__':
     print '  |    |   |  \\  \\___  /_____/   |    |   / __ \\\\  \\___  /_____/   |    |(  <_> )  ___/ '
     print '  |____|   |__|\\___  >           |____|  (____  /\\___  >           |____| \\____/ \\___  >'
     print '                   \\/                         \\/     \\/                              \\/ '
-
     print '-'*100
     print ''
-
     
     player = 1
     print_board(BOARD)
-    x, y = get_coords('Quelle grille souhaitez vous choisir pour débuter le jeu?')
-    haha = "name"
     
-    while True:
+    while PLAYABLE:
+        if len(PLAYABLE) < 1:
+            g_x, g_y = (PLAYABLE[0] - 1) / 3, (PLAYABLE[0] - 1) % 3
+        else:
+            valid_grid = False
+            while not valid_grid:
+                print_board(BOARD, -1, -1)
+                g_x, g_y = get_coords('Quelle grille souhaitez vous choisir? (parmi: {})'.format(PLAYABLE))
+                valid_grid = (g_x, g_y) in PLAYABLE
+
         print ''
         print '# '*40
         print '# TOUR DU JOUEUR {} (Signe "{}")'.format(player, SYMBOL[player])
-        print '#  -> Ce tour se fera sur la grille ({}, {})'.format(x, y)
+        print '#  -> Ce tour se fera sur la grille ({}, {})'.format(g_x, g_y)
         print '# '*40
         print ''
-        print_board(BOARD, x, y)
 
-        x, y = play(BOARD[x][y], player)
-        player = 3 - player
+
+        print_board(BOARD, g_x, g_y)
+        c_x, c_y = play(BOARD[g_x][g_y], player)
+        
+        # Calling the AI
+        grid_n = g_x * 3 + g_y + 1
+        cell_n = c_x * 3 + c_y + 1
+        data = ai_call(grid_n, cell_n, last_player=1)
+        BOARD = format_board(data['board'])
+        PLAYABLE = data['playable']
+        STATE = data['state']
