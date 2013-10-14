@@ -1,7 +1,6 @@
 from subprocess import Popen, PIPE, STDOUT
 import json
 p = Popen(['prolog', '-q', '-s', 'main.pl'], stdin=PIPE, stdout=PIPE, stderr=STDOUT)
-
 output = p.communicate()
     
 output_tokens = output[0].strip().split(' ')

@@ -37,10 +37,8 @@ def ai_call(grid_n, cell_n, last_player):
     with open('input.pl', 'w') as input_file:
         input_file.write(serialize_state(BOARD, grid_n, cell_n, last_player))
 
-
-    proc_call = Popen(['prolog', '<', 'main.pl'], stdout=PIPE, stderr=STDOUT)
-    output = proc_call.communicate()
-    print 'OUTPUT =', output
+    p = Popen(['prolog', '-q', '-s', 'main.pl'], stdin=PIPE, stdout=PIPE, stderr=STDOUT)
+    output = p.communicate()
     output_tokens = output[0].strip().split(' ')
     board = json.loads(output_tokens[0])
     playable_grids = [((i-1) / 3, (i-1) % 3) for i in json.loads(output_tokens[1])]
@@ -137,8 +135,8 @@ if __name__ == '__main__':
     print_board(BOARD)
     
     while PLAYABLE:
-        if len(PLAYABLE) < 1:
-            g_x, g_y = (PLAYABLE[0] - 1) / 3, (PLAYABLE[0] - 1) % 3
+        if len(PLAYABLE) == 1:
+            g_x, g_y = PLAYABLE[0][0], PLAYABLE[0][1]
         else:
             valid_grid = False
             while not valid_grid:
