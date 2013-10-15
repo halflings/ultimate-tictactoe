@@ -1,6 +1,8 @@
-vaGagner(N, J) :- gameField(F), nth1(N,F,G), nth0(0,G,J),nth0(1,G,J),nth0(2,G,0), !.
+vaGagner(N, 3, J) :- gameField(F), nth1(N,F,G), nth0(0,G,J),nth0(1,G,J),nth0(2,G,0),!.
+vaGagner(N, 9, J) :- gameField(F), nth1(N,F,G), nth0(6,G,J),nth0(7,G,J),nth0(8,G,0),!.
 
-nextMove(N,M,J) :- not(vaGagner(M, 3-J)), nextMove(N,M,J), !.
-% TODO : Ajouter une condition au cas où tous les coups possibles font gagner l'autre joueur
-nextMove(N,M,J) :- vaGagner(N, J).
-nextMove(N,M,J).
+nextMove(_,M,J) :- write('#1 N = '), write(N), write(' M = '), write(M), NextJ is 3 - J, not(vaGagner(M, _, NextJ)).
+nextMove(N,M,J) :- write('clause va gagner '), write(N), write(M), vaGagner(N, M, J), write('Le joueur actuel va gagner à '), write(N), write(M), !.
+
+% Si aucune des conditions précédentes n'est vérifiée, on prend une case quelconque.
+% nextMove(_, _, _).
