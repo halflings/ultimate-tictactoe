@@ -1,6 +1,7 @@
 :- ['GrilleSolo.pl'].
 :- ['Champ.pl'].
 :- ['input.pl'].
+:- ['IA_0.1.pl'].
 
 /*Miscellaneous functions*/
 

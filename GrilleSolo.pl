@@ -1,34 +1,85 @@
-/*pleine vérifie que la grille ne soit pas pleine, et renvoit 3 si elle l'est, 0 sinon*/
-pleine([],W) :- W = 3.
-pleine([C|G],W) :- C \== 0, pleine(G,W).
 
-%on aura notre base de faits, et on vérifie si il y a un truc gagné
-gagnee(A,A,A,_,_,_,_,_,_,[1,2,3],A):- A\==0,!.
-gagnee(_,_,_,A,A,A,_,_,_,[4,5,6],A):- A\==0,!.
-gagnee(_,_,_,_,_,_,A,A,A,[7,8,9],A):- A\==0,!.
-gagnee(A,_,_,A,_,_,A,_,_,[1,4,7],A):- A\==0,!.
-gagnee(_,A,_,_,A,_,_,A,_,[2,5,8],A):- A\==0,!.
-gagnee(_,_,A,_,_,A,_,_,A,[3,6,9],A):- A\==0,!.
-gagnee(A,_,_,_,A,_,_,_,A,[1,5,9],A):- A\==0,!.
-gagnee(_,_,A,_,A,_,A,_,_,[3,5,7],A):- A\==0,!.  % Si on n'a pas trouvé de combi gagnante, on regarde si elle est pleine
-gagnee(A,B,C,D,E,F,G,H,I,[],W):-pleine([A,B,C,D,E,F,G,H,I],W),!. % si elle n'est pas pleine, on a l'etat 0
-gagnee(_,_,_,_,_,_,_,_,_,[],0) :- !.
+w:- [main].
 
-/*On retourne dans W l'état de la grille N. 0 si pas gagnée mais pas pleine, 
-1 si gagnée par joueur 1, 2 si gagnée par 2, 3 si pleine et non gagnée'
+:-asserta(vecteurgridStates([0,0,0,0,0,0,0,0,0])).
+
+/*full vérifie que la grille ne soit pas full, et renvoit 3 si elle l'est, 0 sinon*/
+full([],W) :- W = 3.
+full([C|G],W) :- C \== 0, full(G,W).
+
+%on aura notre base de faits, et on vérifie si il y a un truc gagnée
+won(A,A,A,_,_,_,_,_,_,[1,2,3],A):- A\==0,!.
+won(_,_,_,A,A,A,_,_,_,[4,5,6],A):- A\==0,!.
+won(_,_,_,_,_,_,A,A,A,[7,8,9],A):- A\==0,!.
+won(A,_,_,A,_,_,A,_,_,[1,4,7],A):- A\==0,!.
+won(_,A,_,_,A,_,_,A,_,[2,5,8],A):- A\==0,!.
+won(_,_,A,_,_,A,_,_,A,[3,6,9],A):- A\==0,!.
+won(A,_,_,_,A,_,_,_,A,[1,5,9],A):- A\==0,!.
+won(_,_,A,_,A,_,A,_,_,[3,5,7],A):- A\==0,!.  % Si on a pas trouvé de combi gagnante, on regarde si elle est full
+won(A,B,C,D,E,F,G,H,I,[],W):-full([A,B,C,D,E,F,G,H,I],W),!. % si elle n'est pas full, on a l'etat 0
+won(_,_,_,_,_,_,_,_,_,[],0) :- !.
+
+
+/*On retourne dans W l'état de la grille N. 0 si pas gagnée mais pas full, 
+1 si gagnée par joueur 1, 2 si gagnée par 2, 3 si full et non gagnée'
 V est la liste des cases gagnantes*/
-/*Attention à l'indexation (commence à 0 ?).*/
-etatGrille(G,W,V):- nth0(0,G,A1),nth0(1,G,B2),nth0(2,G,C3),nth0(3,G,D4),nth0(4,G,E5),nth0(5,G,F6),nth0(6,G,G7),nth0(7,G,H8),nth0(8,G,I9),
-gagnee(A1,B2,C3,D4,E5,F6,G7,H8,I9,V,W),!.  %;pleine(G,W),W==3,!)
 
-%Donne l'état de la grille numéro N dans le champJeu, selon la numérotation choisie (les numéros partent à 1).'
-etatGrilleChamp(N,W,V):-gameField(D), nth1(N,D,G), etatGrille(G,W,V),!.
+gridState(G,W,V):- nth0(0,G,A1),nth0(1,G,B2),nth0(2,G,C3),nth0(3,G,D4),nth0(4,G,E5),nth0(5,G,F6),nth0(6,G,G7),nth0(7,G,H8),nth0(8,G,I9),
+won(A1,B2,C3,D4,E5,F6,G7,H8,I9,V,W),!.  %;full(G,W),W==3,!)
+
+%Donne l'état de la grille numéro N dans le champJeu'
+fieldState(N,W,V):-champJeu(D), nth0(N,D,G), gridState(G,W,V),!.
 
 /*SI gagne(A,B,C), W est la liste des cases gagnées*/
 
 
 
-%vaGagner(N,J,I). %I est le nombre de coup restants avant de gagner, N le numéro de la grille, J le joueur à qui on s'interesse
+%isWinning(N,J,I). %I est le nombre de coup restants avant de gagner, N le numéro de la grille, J le joueur à qui on s'interesse'
 
-%vaGagner(N,J,I) :- champJeu(D),nth0(N,D,G),
-%:- 
+%isWinning(N,J,I) :- champJeu(D),nth0(N,D,G),'
+isWinning(A,A,A,0,_,_,_,_,_,_,3).
+isWinning(A,A,0,A,_,_,_,_,_,_,2).
+isWinning(A,0,A,A,_,_,_,_,_,_,1).
+
+
+isWinning(A,_,_,_,A,A,0,_,_,_,6).
+isWinning(A,_,_,_,A,0,A,_,_,_,5).
+isWinning(A,_,_,_,0,A,A,_,_,_,4).
+
+isWinning(A,_,_,_,_,_,_,A,A,0,9).
+isWinning(A,_,_,_,_,_,_,A,0,A,8).
+isWinning(A,_,_,_,_,_,_,0,A,A,7).
+
+
+%isWinning(A,_,_,A,_,_,A,_,_,[1,4,7],A):- A\==0,!.
+isWinning(A,A,_,_,0,_,_,A,_,_,4).
+isWinning(A,A,_,_,A,_,_,0,_,_,7).
+isWinning(A,0,_,_,A,_,_,A,_,_,1).
+
+
+%isWinning(_,A,_,_,A,_,_,A,_,[2,5,8],A):- A\==0,!.
+isWinning(A,_,A,_,_,0,_,_,A,_,5).
+isWinning(A,_,A,_,_,A,_,_,0,_,8).
+isWinning(A,_,0,_,_,A,_,_,A,_,2).
+
+
+%isWinning(_,_,A,_,_,A,_,_,A,[3,6,9],A):- A\==0,!.
+isWinning(A,_,_,A,_,_,0,_,_,A,6).
+isWinning(A,_,_,A,_,_,A,_,_,0,9).
+isWinning(A,_,_,0,_,_,A,_,_,A,3).
+
+%isWinning(A,_,_,_,A,_,_,_,A,[1,5,9],A):- A\==0,!.
+isWinning(A,A,_,_,_,0,_,_,_,A,5).
+isWinning(A,A,_,_,_,A,_,_,_,0,9).
+isWinning(A,0,_,_,_,A,_,_,_,A,1).
+
+
+%isWinning(_,_,A,_,A,_,A,_,_,[3,5,7],A):- A\==0,!. 
+isWinning(A,_,_,A,_,0,_,A,_,_,5).
+isWinning(A,_,_,0,_,A,_,A,_,_,3).
+isWinning(A,_,_,A,_,A,_,0,_,_,7):- !.
+
+
+winInOneMove(N,J,I) :- champJeu(D),nth0(N,D,G),nth0(0,G,A1),nth0(1,G,B2),nth0(2,G,C3),
+nth0(3,G,D4),nth0(4,G,E5),nth0(5,G,F6),nth0(6,G,G7),nth0(7,G,H8),nth0(8,G,I9),
+findall(J,isWinning(J,A1,B2,C3,D4,E5,F6,G7,H8,I9,I),I),!.
