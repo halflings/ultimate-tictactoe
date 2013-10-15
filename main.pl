@@ -54,5 +54,5 @@ playMove(N,M,J) :- gameField(D), nth1(N,D,X), nth1(M,X,Y), Y \= 1, Y \= 2, /*che
 /********************/
 /* EXECUTION BLOCK */
 
-% :- playableCell(N,M), nextMove(N,M,J), playMove(N,M,J). /*the AI plays*/
+:- playableCell(N,M), nextPlayer(J), nextMove(N,M,J), !, playMove(N,M,J). /*the AI plays*/
 :- gameField(Ch), getGridsState(X), allowedGrids(Al,X), print(Ch), print(' '), print(Al), print(' '), print(X). /*the result is sent*/
