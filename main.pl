@@ -29,11 +29,10 @@ imprimerGS :- gridsState(G), print(G).
 
 /*Basic IA to give Python GUI a try, just plays somewhere it can play*/
 /*Won't work if the first playable grid is full*/
-calculerProchainCoup(N,M,J) :- nextPlayer(J), trouverGrilleJouable(N), trouverCaseJouable(N,M,1).
+calculerProchainCoup(N,M,J) :- nextPlayer(J), trouverGrilleJouable(N), trouverCaseJouable(N,M).
 trouverGrilleJouable(N) :- getGridsState(State), allowedGrids(Al,State), nth0(0,Al,N).
 /*Called with N, and I=1, to fill M*/
-trouverCaseJouable(N,M,I) :- I < 10, champJeu(D), nth1(N,D,X), nth1(I,X,Y), Y = 0, M is I. 
-trouverCaseJouable(N,M,I) :- I < 10, champJeu(D), nth1(N,D,X), nth1(I,X,Y), Y \= 0, I1 is I+1, trouverCaseJouable(N,M,I1). 
+trouverCaseJouable(N, M) :- trouverGrilleJouable(N), champJeu(D), nth1(N, D, G), nth1(M, G, 0).
 
 /*****************/
 /* MAIN FUNCTIONS*/
