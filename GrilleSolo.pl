@@ -33,9 +33,8 @@ fieldState(N,W,V):-gameField(D), nth0(N,D,G), gridState(G,W,V),!.
 
 
 
-%isWinning(N,J,I). %I est le nombre de coup restants avant de gagner, N le numéro de la grille, J le joueur à qui on s'interesse'
-
-%isWinning(N,J,I) :- gameField(D),nth0(N,D,G),'
+%isWinning(J,1,2,3,4,5,6,7,8,9,R). %J is the player, 1,2....9 are the values of the cases of the grid we want to study, R is the number
+%of the case the player J has to play to win the grid
 isWinning(A,A,A,0,_,_,_,_,_,_,3).
 isWinning(A,A,0,A,_,_,_,_,_,_,2).
 isWinning(A,0,A,A,_,_,_,_,_,_,1).
@@ -78,7 +77,7 @@ isWinning(A,_,_,A,_,0,_,A,_,_,5):-A\==0.
 isWinning(A,_,_,0,_,A,_,A,_,_,3):-A\==0.
 isWinning(A,_,_,A,_,A,_,0,_,_,7):-A\==0, !.
 
-
-winInOneMove(N,J,I) :- gameField(D),nth0(N,D,G),nth0(0,G,A1),nth0(1,G,B2),nth0(2,G,C3),
+%N is the number of the grid, J the player, I the list of winning moves. Empty if the grid is not one-move winning.
+winInOneMove(N,J,I) :- gameField(D),N2 is N-1, nth0(N2,D,G),nth0(0,G,A1),nth0(1,G,B2),nth0(2,G,C3),
 nth0(3,G,D4),nth0(4,G,E5),nth0(5,G,F6),nth0(6,G,G7),nth0(7,G,H8),nth0(8,G,I9),
-findall(J,isWinning(J,A1,B2,C3,D4,E5,F6,G7,H8,I9,I),I),!.
+findall(I,isWinning(J,A1,B2,C3,D4,E5,F6,G7,H8,I9,I),I),!.
