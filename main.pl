@@ -26,11 +26,6 @@ printGridState :- gridsState(G), print(G).
 /*:- asserta(lastMove(-1,-1,-1)).*/
 
 /* IA functions */
-
-/*Basic IA to give Python GUI a try, just plays somewhere it can play*/
-/*Won't work if the first playable grid is full*/
-nextMove(N,M,J) :- nextPlayer(J), playableCell(N,M).
-
 playableGrid(N) :- getGridsState(State), allowedGrids(Al,State), nth0(0,Al,N).
 /*Called with N, and I=1, to fill M*/
 playableCell(N, M) :- playableGrid(N), gameField(D), nth1(N, D, G), nth1(M, G, 0).
@@ -59,5 +54,5 @@ playMove(N,M,J) :- gameField(D), nth1(N,D,X), nth1(M,X,Y), Y \= 1, Y \= 2, /*che
 /********************/
 /* EXECUTION BLOCK */
 
-:- nextMove(N,M,J), playMove(N,M,J). /*the AI plays*/
+% :- playableCell(N,M), nextMove(N,M,J), playMove(N,M,J). /*the AI plays*/
 :- gameField(Ch), getGridsState(X), allowedGrids(Al,X), print(Ch), print(' '), print(Al), print(' '), print(X). /*the result is sent*/
