@@ -19,9 +19,16 @@ def serialize_board(board):
     return [reduce(list.__add__, grid) for grid in board]
 
 
-RAW_BOARD = [ [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
-              [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
-              [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0] ]
+# RAW_BOARD = [ [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
+#               [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
+#               [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0] ]
+
+
+# A board where all the grids can be taken in a one turn, except for the central grid
+RAW_BOARD = [ [1, 1, 0, 0, 0, 0, 0, 0, 0], [1, 1, 0, 0, 0, 0, 0, 0, 0], [1, 1, 0, 0, 0, 0, 0, 0, 0],
+               [1, 1, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [1, 1, 0, 0, 0, 0, 0, 0, 0],
+               [1, 1, 0, 0, 0, 0, 0, 0, 0], [1, 1, 0, 0, 0, 0, 0, 0, 0], [1, 1, 0, 0, 0, 0, 0, 0, 0] ]
+
 PLAYABLE = [(i,j) for i in xrange(3) for j in xrange(3)]
 STATE = [0 for i in xrange(9)]
 BOARD = format_board(RAW_BOARD)
@@ -29,8 +36,10 @@ BOARD = format_board(RAW_BOARD)
 
 def serialize_state(board, grid_n, cell_n, last_player):
     ser = str()
+    ser += ":- ['ai1.pl'].\n"
     ser += ':- asserta(gameField({})).\n'.format(json.dumps(serialize_board(board)))
-    ser += ':- asserta(lastMove({}, {}, {})).'.format(grid_n, cell_n, last_player)
+    ser += ':- asserta(lastMove({}, {}, {})).\n'.format(grid_n, cell_n, last_player)
+
     return ser
 
 def ai_call(grid_n, cell_n, last_player):
@@ -39,7 +48,7 @@ def ai_call(grid_n, cell_n, last_player):
 
     p = Popen(['prolog', '-q', '-s', 'main.pl'], stdin=PIPE, stdout=PIPE, stderr=STDOUT)
     output = p.communicate()
-    print "OUTPUT = ", output
+    print "OUTPUT = ", output[0].strip()
     output_tokens = output[0].strip().split(' ')
     board = json.loads(output_tokens[0])
     playable_grids = [((i-1) / 3, (i-1) % 3) for i in json.loads(output_tokens[1])]
