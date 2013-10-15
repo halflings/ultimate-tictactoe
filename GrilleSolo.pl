@@ -22,7 +22,7 @@ etatGrille(G,W,V):- nth0(0,G,A1),nth0(1,G,B2),nth0(2,G,C3),nth0(3,G,D4),nth0(4,G
 gagnee(A1,B2,C3,D4,E5,F6,G7,H8,I9,V,W),!.  %;pleine(G,W),W==3,!)
 
 %Donne l'état de la grille numéro N dans le champJeu, selon la numérotation choisie (les numéros partent à 1).'
-etatGrilleChamp(N,W,V):-champJeu(D), nth1(N,D,G), etatGrille(G,W,V),!.
+etatGrilleChamp(N,W,V):-gameField(D), nth1(N,D,G), etatGrille(G,W,V),!.
 
 /*SI gagne(A,B,C), W est la liste des cases gagnées*/
 

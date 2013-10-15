@@ -1,1 +1,0 @@
-?- write('Hello world!'), nl, write('Another line in the shell.').
