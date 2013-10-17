@@ -1,0 +1,85 @@
+ul, li, div {
+    magin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Ubuntu, Arial, Sans-serif;
+    background: rgb(245, 245, 255);
+}
+
+#wrapper {
+    width: 700px;
+    margin: 0 auto;
+}
+
+.gametitle {
+    font-weight: normal;
+    font-size: 43px;
+    letter-spacing: -2px;
+    text-align: center;
+    margin: 0;
+}
+
+.instruction {
+    font-weight: normal;
+    font-size: 20px;
+    text-align: center;
+    margin: 3px;
+}
+
+.gamefield {
+    display: block;
+    margin: 10px 0;
+    font-size: 0;
+}
+
+.gamefield > ul {
+    width: 30%;
+    margin: 4px;
+    display: inline-block;
+    border: 1px solid transparent;
+    font-family: sans-serif;
+    color: rgba(0, 0, 0, 0.8);
+}
+
+.gamefield > ul.won {
+    color: #FFF;
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
+
+}
+
+span.player1 {
+    color: rgb(94, 203, 255);
+}
+.gamefield > ul.won.player1 > li{
+    background: rgba(94, 203, 255, 0.8);
+}
+
+
+span.player2 {
+    color: rgb(255, 100, 94);
+}
+.gamefield > ul.won.player2 > li{
+    background: rgba(255, 100, 94, 0.8);
+}
+
+.gamefield > ul > li {
+    width: 32%;
+    text-align: center;
+    font-size: 35pt;
+    line-height: 45pt;
+    display: inline-block;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: rgb(255,255,255);
+    opacity: 0.4;
+
+}
+
+.gamefield > ul.playable > li {
+    opacity: 1;
+}
+
+.gamefield > ul > li.last-move  {
+    opacity: 1;
+}
