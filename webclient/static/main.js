@@ -1,17 +1,15 @@
 // Initialization
 SYMBOL = {1: 'X', 2: 'O', 0: '&nbsp;'}
-PLAYABLE = [6]
-BOARD = [ [1, 1, 0, 0, 0, 2, 0, 0, 0], [1, 0, 1, 0, 0, 0, 2, 2, 2], [1, 0, 0, 2, 0, 0, 1, 0, 2],
-          [1, 0, 2, 1, 0, 2, 1, 2, 0], [0, 2, 0, 0, 1, 0, 2, 2, 0], [1, 1, 0, 0, 0, 0, 0, 0, 0],
-          [1, 1, 0, 0, 0, 0, 0, 0, 0], [1, 1, 0, 0, 2, 0, 2, 0, 0], [1, 1, 0, 0, 0, 0, 0, 0, 0] ];
-STATE = [0, 1, 0, 2, 0, 0, 0, 0, 0];
-
-// TODO : Require AI to return the last move to update this
-LAST_MOVE = {grid:1, cell:6, player:2};
+PLAYABLE = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+BOARD = [ [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]];
+STATE = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+LAST_MOVE = {grid:-1, cell:-1, player:2};
 
 updateGame = function() {
-    next_player = LAST_MOVE.player;
-    current_player = 3 - next_player;
+    var next_player = LAST_MOVE.player;
+    var current_player = 3 - next_player;
 
     // Displaying the current player
     $('.current-player').text(SYMBOL[current_player]);
@@ -27,9 +25,19 @@ updateGame = function() {
         }
     }
 
+    // Clearing all previous marking
+    $('.gamefield > ul').removeAttr('class');
     // Marking-up playable cells
     for (var i = 0; i < PLAYABLE.length; i++) {
-        $('.gamefield > ul:nth-child('+PLAYABLE[i]+')').attr('class', 'playable');
+        $('.gamefield > ul:nth-child('+PLAYABLE[i]+')').addClass('playable');
+    }
+
+    // Applying grid states (won, etc.)
+    for (var i = 0; i < STATE.length; i ++) {
+        var grid_state = STATE[i];
+        if (grid_state != 0) {
+            $('.gamefield > ul:nth-child('+(i + 1)+')').addClass('won player' + grid_state);
+        }
     }
 
     // Marking-up the last move
@@ -39,7 +47,7 @@ updateGame = function() {
 $(document).ready(function() {
     updateGame();
 
-    //Adding callbacks
+    //Adding callbacks on cell clicks
     $('.gamefield > ul > li').click(function(event) {
         var cell = $(event.target);
         var grid = cell.parent();
@@ -57,33 +65,34 @@ $(document).ready(function() {
         updateGame();
 
 
-
-        console.log('Sending : ');
-        console.log({
+        var sent_data = {
             board: BOARD,
-            player: current_player,
+            player: LAST_MOVE.player,
             grid:grid.index() + 1,
             cell:cell.index() + 1
-          });
-
+          }
+        console.log('Sending : ');
+        console.log(sent_data);
 
         $.ajax({
-            url: '/play',
-            method: 'POST',
-            data: {
-                board: BOARD,
-                player: current_player,
-                grid:grid.index() + 1,
-                cell:cell.index() + 1
-            },
-            success : function (data) {
+          url: "/play",
+          type: 'POST',
+          data: JSON.stringify(sent_data),
+          dataType: "json",
+          success: function (data) {
                 console.log('RECEIVED : ');
                 console.log(data);
-            }
 
+                PLAYABLE = data.playable;
+                STATE = data.state;
+                BOARD = data.board;
+                LAST_MOVE = data.last_move;
+
+                updateGame();
+          }
         });
         
     }); // End of cell-click event
 
  
-});
+}); // End of document initialization
