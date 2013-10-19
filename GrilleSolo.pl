@@ -27,7 +27,7 @@ gridState(G,W,V):- nth0(0,G,A1),nth0(1,G,B2),nth0(2,G,C3),nth0(3,G,D4),nth0(4,G,
 won(A1,B2,C3,D4,E5,F6,G7,H8,I9,V,W),!.  %;full(G,W),W==3,!)
 
 %Gives the state of the grid N in the gameField'
-fieldState(N,W,V):-gameField(D), nth0(N,D,G), gridState(G,W,V),!.
+fieldState(N,W,V):-gameField(D), N2 is N-1, nth0(N2,D,G), gridState(G,W,V),!.
 
 /*if gagne(A,B,C), W est la liste des cases gagnées*/
 
@@ -77,12 +77,12 @@ isWinning(A,_,_,A,_,A,_,0,_,_,7):-A\==0, !.
 
 %N is the number of the grid, J the player, I the list of winning moves. Empty if the grid is not one-move winning.
 winInOneMove(N,J,I) :- gameField(D),N2 is N-1, nth0(N2,D,G),nth0(0,G,A1),nth0(1,G,B2),nth0(2,G,C3),
-nth0(3,G,D4),nth0(4,G,E5),nth0(5,G,F6),nth0(6,G,G7),nth0(7,G,H8),nth0(8,G,I9),
-findall(I,isWinning(J,A1,B2,C3,D4,E5,F6,G7,H8,I9,I),I),I\==[],!.
+nth0(3,G,D4),nth0(4,G,E5),nth0(5,G,F6),nth0(6,G,G7),nth0(7,G,H8),nth0(8,G,I9),isWinning(J,A1,B2,C3,D4,E5,F6,G7,H8,I9,I).
+%findall(I,isWinning(J,A1,B2,C3,D4,E5,F6,G7,H8,I9,I),I),I\==[],!.
 
 
 membre(X,[X|_]).
 membre(X,[_|L]) :- membre(X,L).
 
 %isWinningMove tells if the move in the grid N and case C for player J makes him win. True or false.
-isWinningMove(N,C,J):-winInOneMove(N,J,G), membre(C,G),!.
+isWinningMove(N,C,J):-winInOneMove(N,J,G), membre(C,G).

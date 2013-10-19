@@ -42,7 +42,7 @@ allowedGrids([1,2,3,4,5,6,7,8,9],_) :- lastMove(-1,-1,_). /*first time, one can 
 nextPlayer(X) :- lastMove(_,_,-1), X is 1.
 nextPlayer(X) :- lastMove(_,_,P), P > 0, X is 3-P.
 
-getGridsState(X) :- etatGrilleChamp(1,X1,_),etatGrilleChamp(2,X2,_),etatGrilleChamp(3,X3,_),etatGrilleChamp(4,X4,_),etatGrilleChamp(5,X5,_),etatGrilleChamp(6,X6,_),etatGrilleChamp(7,X7,_),etatGrilleChamp(8,X8,_),etatGrilleChamp(9,X9,_), append([],[X1,X2,X3,X4,X5,X6,X7,X8,X9],X). /*a remplacer par la fonction de Champ quand elle marchera.*/
+getGridsState(X) :- fieldState(1,X1,_),fieldState(2,X2,_),fieldState(3,X3,_),fieldState(4,X4,_),fieldState(5,X5,_),fieldState(6,X6,_),fieldState(7,X7,_),fieldState(8,X8,_),fieldState(9,X9,_), append([],[X1,X2,X3,X4,X5,X6,X7,X8,X9],X). /*a remplacer par la fonction de Champ quand elle marchera.*/
 
 playMove(N,M,J) :- gameField(D), nth1(N,D,X), nth1(M,X,Y), Y \= 1, Y \= 2, /*checks that location not already played*/
 					nextPlayer(J), /*check that the player is the good one */
