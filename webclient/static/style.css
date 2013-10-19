@@ -74,6 +74,13 @@ span.player2 {
     background: rgb(255,255,255);
     opacity: 0.4;
 
+    /* Making the 'li' element unselectable, just in case*/
+   -moz-user-select: -moz-none;
+   -khtml-user-select: none;
+   -webkit-user-select: none;
+   -ms-user-select: none;
+   user-select: none;
+
 }
 
 .gamefield > ul.playable > li {
