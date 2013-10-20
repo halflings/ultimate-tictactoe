@@ -3,10 +3,28 @@ avoidLoss(M,J) :- NextJ is 3 - J, not(isWinningMove(M, _, NextJ)).
 % On essaie de jouer une case pour gagner la grille actuelle
 winGrid(N,M,J) :- isWinningMove(N, M, J).
 
-nextMove(_, M, J) :- avoidLoss(M, J).
-nextMove(N, M, J) :- winGrid(N, M, J).
-% Si aucune des conditions précédentes n'est vérifiée, on prend une case quelconque.
-nextMove(N, M, J) :- not(avoidLoss(M, J)),not(winGrid(N, M, J)).
+cellWeight(M, W) :- W is 3 - (2 - M mod 3) - (1 - M // 3).
+
+% Avoid loss and win the current grid
+nextMove(N, M, J) :- playableCell(N,M), avoidLoss(M, J), winGrid(N, M, J), cellWeight(M, 1).
+nextMove(N, M, J) :- playableCell(N,M), avoidLoss(M, J), winGrid(N, M, J), cellWeight(M, 2).
+nextMove(N, M, J) :- playableCell(N,M), avoidLoss(M, J), winGrid(N, M, J), cellWeight(M, 3).
+
+% Avoid loss
+nextMove(N, M, J) :- playableCell(N,M), avoidLoss(M, J), cellWeight(M, 1).
+nextMove(N, M, J) :- playableCell(N,M), avoidLoss(M, J), cellWeight(M, 2).
+nextMove(N, M, J) :- playableCell(N,M), avoidLoss(M, J), cellWeight(M, 3).
+
+% Win the current grid
+nextMove(N, M, J) :- playableCell(N,M), winGrid(N, M, J), cellWeight(M, 1).
+nextMove(N, M, J) :- playableCell(N,M), winGrid(N, M, J), cellWeight(M, 2).
+nextMove(N, M, J) :- playableCell(N,M), winGrid(N, M, J), cellWeight(M, 3).
+
+
+% Play the best cell
+nextMove(N, M, _) :- playableCell(N,M), cellWeight(M, 1).
+nextMove(N, M, _) :- playableCell(N,M), cellWeight(M, 2).
+nextMove(N, M, _) :- playableCell(N,M), cellWeight(M, 3).
 
 
 % bestMove(_,M,J) :- write('#1 N = '), write(N), write(' M = '), write(M), NextJ is 3 - J, not(vaGagner(M, _, NextJ)).

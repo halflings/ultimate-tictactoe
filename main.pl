@@ -48,7 +48,7 @@ playMove(N,M,J) :- gameField(D), nth1(N,D,G), nth1(M,G,0), /*checks that locatio
 /* EXECUTION BLOCK */
 
 /* The AI plays its move*/
-:- playableCell(N,M), nextPlayer(J), nextMove(N,M,J), !, playMove(N,M,J). 
+:- nextPlayer(J), nextMove(N,M,J), !, playMove(N,M,J). 
 /* Prints the result on screen: "gamefield[space]allowed_grids[space]grids_state[space]last_move" */
 :- gameField(Ch), getGridsState(X), allowedGrids(Allowed,X), Last = [N, M, J], lastMove(N, M, J),
    print(Ch), print(' '), print(Allowed), print(' '), print(X), print(' '), print(Last). 

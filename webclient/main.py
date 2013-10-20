@@ -14,7 +14,7 @@ def serialize_state(board, grid_n, cell_n, last_player):
     return ser
 
 def ai_call(board, grid_n, cell_n, last_player):
-    with open('../input.pl', 'w') as input_file:
+    with open('../input.pl', 'w+') as input_file:
         input_file.write(serialize_state(board, grid_n, cell_n, last_player))
 
     p = Popen(['prolog', '-q', '-s', '../main.pl'], stdin=PIPE, stdout=PIPE, stderr=STDOUT)
