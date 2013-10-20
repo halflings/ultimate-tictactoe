@@ -3,6 +3,7 @@ avoidLoss(M,J) :- NextJ is 3 - J, not(isWinningMove(M, _, NextJ)).
 % On essaie de jouer une case pour gagner la grille actuelle
 winGrid(N,M,J) :- isWinningMove(N, M, J).
 
+% Change this later (the same as "weights")
 cellWeight(M, W) :- W is 3 - (2 - M mod 3) - (1 - M // 3).
 
 % Avoid loss and win the current grid

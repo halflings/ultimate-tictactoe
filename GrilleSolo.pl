@@ -83,5 +83,9 @@ findall(I,isWinning(J,A1,B2,C3,D4,E5,F6,G7,H8,I9,I),I),I\==[],!.
 membre(X,[X|_]).
 membre(X,[_|L]) :- membre(X,L).
 
+count([],_,0).
+count([X|T],X,Y):- count(T,X,Z), Y is 1+Z.
+count([X1|T],X,Z):- X1\=X,count(T,X,Z).
+
 %isWinningMove tells if the move in the grid N and case C for player J makes him win. True or false.
 isWinningMove(N,C,J):-winInOneMove(N,J,G), membre(C,G).
