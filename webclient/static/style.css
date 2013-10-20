@@ -29,6 +29,7 @@ body {
 }
 
 .gamefield {
+    position: relative;
     display: block;
     margin: 10px 0;
     font-size: 0;
@@ -72,7 +73,7 @@ span.player2 {
     display: inline-block;
     border: 1px solid rgba(0, 0, 0, 0.1);
     background: rgb(255,255,255);
-    opacity: 0.4;
+    opacity: 0.3;
 
     /* Making the 'li' element unselectable, just in case*/
    -moz-user-select: -moz-none;
@@ -85,6 +86,7 @@ span.player2 {
 
 .gamefield > ul.playable > li {
     opacity: 1;
+    border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .gamefield > ul > li.last-move  {

@@ -4,8 +4,36 @@ PLAYABLE = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 BOARD = [ [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
           [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
           [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]];
+
+// BOARD = [ [1, 1, 1, 1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1, 1, 1, 1],
+//           [1, 1, 1, 1, 1, 1, 1, 1, 1], [1, 1, 1, 0, 0, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1, 1, 1, 1],
+//           [1, 1, 1, 1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1, 1, 1, 1]];
+
 STATE = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 LAST_MOVE = {grid:-1, cell:-1, player:2};
+
+checkWinner = function() {
+    // Horizontal  
+    for (var i = 0; i < STATE.length; i+= 3) {
+        if (STATE[i] == STATE[i+1] && STATE[i+1] == STATE[i+2]) {
+            return STATE[i];
+        }
+    }
+
+    // Vertical
+    for (var i = 0; i < 3; i++) {
+        if (STATE[i] == STATE[i+3] && STATE[i+3] == STATE[i+6]) {
+            return STATE[i];
+        }
+    }
+
+    // Diagonal
+    if ((STATE[0] == STATE[4] && STATE[4] == STATE[8]) || (STATE[2] == STATE[4] && STATE[4] == STATE[5])) {
+        return STATE[4];
+    }
+
+    return 0;
+}
 
 updateGame = function() {
     var next_player = LAST_MOVE.player;
@@ -42,6 +70,14 @@ updateGame = function() {
 
     // Marking-up the last move
     $('.gamefield > ul:nth-child('+(LAST_MOVE.grid)+') > li:nth-child('+(LAST_MOVE.cell)+')').attr('class', 'last-move');
+
+
+    // Checking if the game ended
+    winner = checkWinner();
+
+    if (winner != 0) {
+        // Do something
+    }
 } 
 
 $(document).ready(function() {
