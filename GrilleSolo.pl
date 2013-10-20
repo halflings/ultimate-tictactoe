@@ -85,4 +85,4 @@ membre(X,[X|_]).
 membre(X,[_|L]) :- membre(X,L).
 
 %isWinningMove tells if the move in the grid N and case C for player J makes him win. True or false.
-isWinningMove(N,C,J):-winInOneMove(N,J,G), membre(C,G).
+isWinningMove(N,C,J):-winInOneMove(N,J,G). %membre(C,G)
