@@ -6,7 +6,7 @@ winGrid(N,M,J) :- isWinningMove(N, M, J).
 nextMove(_, M, J) :- avoidLoss(M, J).
 nextMove(N, M, J) :- winGrid(N, M, J).
 % Si aucune des conditions précédentes n'est vérifiée, on prend une case quelconque.
-nextMove(_, _, _).
+nextMove(N, M, J) :- not(avoidLoss(M, J)),not(winGrid(N, M, J)).
 
 
 % bestMove(_,M,J) :- write('#1 N = '), write(N), write(' M = '), write(M), NextJ is 3 - J, not(vaGagner(M, _, NextJ)).
