@@ -22,12 +22,11 @@ won(_,_,_,_,_,_,_,_,_,[],0) :- !.
 /*W is the state of the grid N. 0 if it is not full and not won, 
 1 if won by player 1, 2 by player 2, 3 if full but not won
 V is the list of the winning cases*/
-
-gridState(G,W,V):- nth0(0,G,A1),nth0(1,G,B2),nth0(2,G,C3),nth0(3,G,D4),nth0(4,G,E5),nth0(5,G,F6),nth0(6,G,G7),nth0(7,G,H8),nth0(8,G,I9),
-won(A1,B2,C3,D4,E5,F6,G7,H8,I9,V,W),!.  %;full(G,W),W==3,!)
+gridState([C1, C2, C3, C4, C5, C6, C7, C8, C9,V,W],W,V):- won(C1, C2, C3, C4, C5, C6, C7, C8, C9,V,W), !. %;full(G,W),W==3,!)
+cellValue(N, M, V) :- gameField(F), nth1(N, F, G), nth1(N, G, V), !.
 
 %Gives the state of the grid N in the gameField'
-fieldState(N,W,V):-gameField(D), N2 is N-1, nth0(N2,D,G), gridState(G,W,V),!.
+fieldState(N,W,V) :- gameField(D), N2 is N-1, nth0(N2,D,G), gridState(G,W,V),!.
 
 /*if gagne(A,B,C), W est la liste des cases gagnées*/
 
