@@ -78,10 +78,12 @@ updateGame = function() {
 
 
     // Checking if the game ended
-    winner = checkWinner();
+    var winner = checkWinner();
 
     if (winner != 0) {
-        // Do something
+        $('.winner').text(SYMBOL[winner]);
+        $('#gameover > h3').attr('class', 'player' + winner);
+        $('#gameover').show();
     }
 } 
 
