@@ -33,7 +33,7 @@ checkWinner = function() {
     }
 
     // Diagonal
-    if ((STATE[0] == STATE[4] && STATE[4] == STATE[8]) || (STATE[2] == STATE[4] && STATE[4] == STATE[5])) {
+    if ((STATE[0] == STATE[4] && STATE[4] == STATE[8]) || (STATE[2] == STATE[4] && STATE[4] == STATE[6])) {
         return STATE[4];
     }
 

@@ -60,6 +60,7 @@ body {
     font-weight: normal;
     text-align: center;
     line-height: 300px;
+    text-shadow: 1px 1px 0px rgba(80, 80, 200, 1);
 }
 
 .gamefield > ul.won {
