@@ -44,7 +44,7 @@ avoidWinWeight(M, J, 64) :- NextJ is 3 - J, not(isWinningMove(M, _, NextJ)).
 avoidWinWeight(_, _, 0).
 
 % TODO : Fix fieldState
-avoidWonWeight(M,128) :- fieldState(M, 0, _).
+avoidWonWeight(M,128) :- fieldState(M, S, _), S = 0.
 avoidWonWeight(_,0).
 
 % TODO : Add the predicates that aren't implemented yet
