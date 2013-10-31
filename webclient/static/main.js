@@ -108,6 +108,7 @@ aiCall = function() {
     $.ajax({
       url: "/play",
       type: 'POST',
+      async: false,
       data: JSON.stringify(sent_data),
       dataType: "json",
       success: function (data) {
@@ -119,9 +120,22 @@ aiCall = function() {
             BOARD = data.board;
             LAST_MOVE = data.last_move;
 
-            updateGame();
       }
     });
+}
+
+aiMove = function() {
+    aiCall();
+    updateGame();
+}
+
+finishGame = function() {
+
+    while (checkWinner() == 0 && PLAYABLE.length != 0) {
+        aiCall();
+    }
+
+    updateGame();
 }
 
 $(document).ready(function() {
@@ -131,7 +145,7 @@ $(document).ready(function() {
     $(document).keypress(function(e){
         if (e.which == 'a'.charCodeAt(0) || e.which == 'A'.charCodeAt(0) ) 
         {
-            aiCall();
+            aiMove();
         }
         else if (e.which == 'r'.charCodeAt(0) || e.which == 'R'.charCodeAt(0) ) 
         {
@@ -156,7 +170,7 @@ $(document).ready(function() {
 
         updateGame();
 
-        aiCall();
+        aiMove();
         
     }); // End of cell-click event
 

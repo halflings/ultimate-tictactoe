@@ -32,18 +32,14 @@ PLAYABLE = [(i,j) for i in xrange(3) for j in xrange(3)]
 STATE = [0 for i in xrange(9)]
 BOARD = format_board(RAW_BOARD)
 
-
-def serialize_state(ai, board, grid_n, cell_n, last_player):
+def ai_call(ai, grid_n, cell_n, last_player):
     ser = str()
-    ser += ":- ['ai1.pl'].\n"
-    ser += ':- asserta(gameField({})).\n'.format(json.dumps(serialize_board(board)))
+    ser += ":- ['{}'].\n".format(ai)
+    ser += ':- asserta(gameField({})).\n'.format(json.dumps(BOARD))
     ser += ':- asserta(lastMove({}, {}, {})).\n'.format(grid_n, cell_n, last_player)
 
-    return ser
-
-def ai_call(ai, grid_n, cell_n, last_player):
-    with open('input.pl', 'w') as input_file:
-        input_file.write(serialize_state(ai, BOARD, grid_n, cell_n, last_player))
+    with open('input.pl', 'w+') as input_file:
+        input_file.write(ser)
 
     p = Popen(['prolog', '-q', '-s', 'main.pl'], stdin=PIPE, stdout=PIPE, stderr=STDOUT)
     output = p.communicate()
@@ -167,7 +163,7 @@ if __name__ == '__main__':
         # Calling the AI
         grid_n = g_x * 3 + g_y + 1
         cell_n = c_x * 3 + c_y + 1
-        data = ai_call(ai, grid_n, cell_n, last_player=1)
+        data = ai_call('ai1.pl', grid_n, cell_n, last_player=1)
         
         print 'raw board', data['board']
         print 'board', format_board(data['board'])
