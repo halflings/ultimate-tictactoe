@@ -19,8 +19,8 @@ bestCell(N, M, J, W) :- playableCell(N, M), cellWeight(N, M, J, W), not(biggerWe
 biggerWeight(J, W) :- playableCell(XN, XM), cellWeight(XN, XM, J, XW), XW > W.
 
 cellWeight(N, M, J, W) :- baseWeight(M, W8), emptyGridWeight(M, J, W7), avoidSpoiledWinWeight(M, J, W6),
-    winWeight(N, M, J, W5), spoilWinWeight(N, M, J, W4), avoidWinWeight(N, M, J, W3), avoidWonWeight(N, M, J, W2),
-  	W is W2 + W3 + W4 + W5 + W6 + W7 + W8, !.
+    winWeight(N, M, J, W5), spoilWinWeight(N, M, J, W4), avoidWinWeight(M, J, W3), avoidWonWeight(M, W2), ultimateMoveWeight(N,M,J,W1),
+  	W is W1 + W2 + W3 + W4 + W5 + W6 + W7 + W8, !.
 
 baseWeight(M, 1) :- member(M, [1,3,7,9]).
 baseWeight(M, 2) :- member(M, [2,4,6,8]).
@@ -38,12 +38,12 @@ winWeight(_, _, _, 0).
 spoilWinWeight(N, M, J, 32) :- NextJ is 3 - J, isWinningMove(N, M, NextJ).
 spoilWinWeight(_, _, _, 0).
 
-avoidWinWeight(_, M, J, 64) :- NextJ is 3 - J, not(isWinningMove(M, _, NextJ)).
-avoidWinWeight(_, _, _, 0).
+avoidWinWeight(M, J, 64) :- NextJ is 3 - J, not(isWinningMove(M, _, NextJ)).
+avoidWinWeight(_, _, 0).
 
 % TODO : Fix fieldState
-avoidWonWeight(_, M, _, 128) :- fieldState(M, W, _), W \= 0.
-avoidWonWeight(_, _, _, 0).
+avoidWonWeight(M,128) :- fieldState(M, 0, _).
+avoidWonWeight(_,0).
 
 ultimateMoveWeight(N,M,J,256) :- isWinningMove(N,M,J),winFieldInOneMove(N,J,_).
 ultimateMoveWeight(_,_,_,0).
