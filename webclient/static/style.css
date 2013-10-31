@@ -72,18 +72,18 @@ a:active {
     text-shadow: 1px 1px 0px rgba(80, 80, 200, 1);
 }
 
-#controls {
+.controls {
     list-style: none;
     text-align: center;
     margin: 10px 0 0 0;
 }
 
-#controls > li {
+.controls > li {
     display: inline-block;
     margin: 0 10px;
 }
 
-#ai-choice {
+.ai-choice {
     background: #FFF;
     padding: 6px;
     border-radius: 5px;
