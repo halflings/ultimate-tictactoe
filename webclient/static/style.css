@@ -9,6 +9,15 @@ body {
     background: rgb(245, 245, 255);
 }
 
+a {
+    color: rgb(20, 50, 200);
+    text-decoration: none;
+}
+
+a:active {
+    color: rgb(200, 50, 50);
+}
+
 #wrapper {
     width: 700px;
     margin: 0 auto;
@@ -74,16 +83,6 @@ body {
     margin: 0 10px;
 }
 
-#reset-game {
-    color: rgb(20, 50, 200);
-    text-decoration: none;
-}
-
-#reset-game:active {
-    color: rgb(200, 50, 50);
-}
-
-
 #ai-choice {
     background: #FFF;
     padding: 6px;
@@ -108,9 +107,16 @@ body {
 .player2 {
     color: rgb(255, 100, 94);
 }
+
 .gamefield > ul.won.player2 > li{
     background: rgba(255, 100, 94, 0.8);
 }
+
+/* Player 3 = tie */
+.gamefield > ul.won.player3 > li{
+    background: #737373;
+}
+
 
 .gamefield > ul > li {
     width: 32%;

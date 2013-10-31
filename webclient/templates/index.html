@@ -6,6 +6,7 @@
 
     <!-- Main js code -->
     <script src="static/main.js"></script>
+    <link rel="stylesheet" href="static/font-awesome/css/font-awesome.min.css">
 
     <!-- CSS Stylesheet -->
     <link rel="stylesheet" href="static/style.css">
@@ -15,12 +16,22 @@
 <body>
 
     <div id="wrapper">
-        <h1 class="gametitle">Ultimate tic-tac-toe</h1>
+        <h1 class="gametitle"><i class="fa fa-flash"></i> Ultimate tic-tac-toe</h1>
         <h2 class="instruction">Current player: <span class="player1 current-player">X</span>. Next: <span class="player2 next-player">O</span></h3>
         <ul id="controls">
             <li>
-                <a id="reset-game" href="#" onclick="javascript:initGame()">Reset the game</a>
+                <a id="reset-game" href="#" onclick="javascript:initGame()">
+                    <i class="fa fa-refresh"></i> Reset the game
+                </a>
             </li>
+
+            <li>
+               <a id="ai-play" href ="#" onclick="javascript:aiCall()">
+                   <i class="fa fa-magic"></i> AI play
+               </a>
+
+            </li>
+
             <li>
                 <select id="ai-choice">
                     <option value="ai1.pl">Global context</option>

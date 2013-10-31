@@ -82,6 +82,38 @@ updateGame = function() {
     }
 } 
 
+aiCall = function() {
+    // Fetching the currently active AI
+    var ai_type = $('#ai-choice').val()
+    var sent_data = {
+        board: BOARD,
+        player: LAST_MOVE.player,
+        grid: LAST_MOVE.grid,
+        cell: LAST_MOVE.cell,
+        ai: ai_type
+      }
+    console.log('Sending : ');
+    console.log(sent_data);
+
+    $.ajax({
+      url: "/play",
+      type: 'POST',
+      data: JSON.stringify(sent_data),
+      dataType: "json",
+      success: function (data) {
+            console.log('RECEIVED : ');
+            console.log(data);
+
+            PLAYABLE = data.playable;
+            STATE = data.state;
+            BOARD = data.board;
+            LAST_MOVE = data.last_move;
+
+            updateGame();
+      }
+    });
+}
+
 $(document).ready(function() {
     initGame();
 
@@ -94,7 +126,7 @@ $(document).ready(function() {
             return;
         }
 
-        // Updating the grid with the move and displaying it
+        // Updating the grid with the move that have been played and displaying it
         LAST_MOVE.player = 3 - LAST_MOVE.player;
         LAST_MOVE.grid = grid.index() + 1;
         LAST_MOVE.cell = cell.index() + 1;
@@ -102,36 +134,7 @@ $(document).ready(function() {
 
         updateGame();
 
-        // Fetching the currently active AI
-        var ai_type = $('#ai-choice').val()
-
-        var sent_data = {
-            board: BOARD,
-            player: LAST_MOVE.player,
-            grid: grid.index() + 1,
-            cell: cell.index() + 1,
-            ai: ai_type
-          }
-        console.log('Sending : ');
-        console.log(sent_data);
-
-        $.ajax({
-          url: "/play",
-          type: 'POST',
-          data: JSON.stringify(sent_data),
-          dataType: "json",
-          success: function (data) {
-                console.log('RECEIVED : ');
-                console.log(data);
-
-                PLAYABLE = data.playable;
-                STATE = data.state;
-                BOARD = data.board;
-                LAST_MOVE = data.last_move;
-
-                updateGame();
-          }
-        });
+        aiCall();
         
     }); // End of cell-click event
 
