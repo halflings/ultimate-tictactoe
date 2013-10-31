@@ -59,8 +59,8 @@ a:active {
     height: 100%;
     width: 100%;
     z-index: 3;
-    background: rgba(255, 255, 255, 0.8);
-    box-shadow: 0px 0px 80px 30px rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.5);
+    box-shadow: 0px 0px 80px 30px rgba(255, 255, 255, 0.5);
 }
 
 #gameover > h3 {
@@ -68,7 +68,7 @@ a:active {
     letter-spacing: -3;
     font-weight: normal;
     text-align: center;
-    line-height: 300px;
+    line-height: 475px;
     text-shadow: 1px 1px 0px rgba(80, 80, 200, 1);
 }
 

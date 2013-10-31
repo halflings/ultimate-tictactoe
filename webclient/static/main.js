@@ -8,26 +8,27 @@ initGame = function() {
     STATE = [0, 0, 0, 0, 0, 0, 0, 0, 0];
     LAST_MOVE = {grid:-1, cell:-1, player:-1};
 
+    $('#gameover').hide();
     updateGame();
 }
 
 checkWinner = function() {
     // Horizontal  
     for (var i = 0; i < STATE.length; i+= 3) {
-        if (STATE[i] == STATE[i+1] && STATE[i+1] == STATE[i+2]) {
+        if (STATE[i] != 3 && STATE[i] == STATE[i+1] && STATE[i+1] == STATE[i+2]) {
             return STATE[i];
         }
     }
 
     // Vertical
     for (var i = 0; i < 3; i++) {
-        if (STATE[i] == STATE[i+3] && STATE[i+3] == STATE[i+6]) {
+        if (STATE[i] != 3 && STATE[i] == STATE[i+3] && STATE[i+3] == STATE[i+6]) {
             return STATE[i];
         }
     }
 
     // Diagonal
-    if ((STATE[0] == STATE[4] && STATE[4] == STATE[8]) || (STATE[2] == STATE[4] && STATE[4] == STATE[6])) {
+    if ((STATE[0] != 3 && STATE[0] == STATE[4] && STATE[4] == STATE[8]) || (STATE[2] != 3 && STATE[2] == STATE[4] && STATE[4] == STATE[6])) {
         return STATE[4];
     }
 
@@ -116,6 +117,18 @@ aiCall = function() {
 
 $(document).ready(function() {
     initGame();
+
+    // Setting up shortcuts
+    $(document).keypress(function(e){
+        if (e.which == 'a'.charCodeAt(0) || e.which == 'A'.charCodeAt(0) ) 
+        {
+            aiCall();
+        }
+        else if (e.which == 'r'.charCodeAt(0) || e.which == 'R'.charCodeAt(0) ) 
+        {
+            initGame();
+        }
+    });
 
     //Adding callbacks on cell clicks
     $('.gamefield > ul > li').click(function(event) {
