@@ -151,6 +151,10 @@ $(document).ready(function() {
         {
             initGame();
         }
+        else if (e.which == 'f'.charCodeAt(0) || e.which == 'F'.charCodeAt(0) ) 
+        {
+            finishGame();
+        }
     });
 
     //Adding callbacks on cell clicks
