@@ -5,14 +5,16 @@ spoilWin(N, M, J) :- NextJ is 3 - J, isWinningMove(N, M, NextJ).
 
 
 % Priorities:
-% 1. Play a cell that makes you win the game (weight : 256)
-% 2. Avoid going on a grid that has been won (weight : 128)
-% 3. Avoid going on a grid where the next player can win in one move  (weight: 64)
-% 4. Spoil a win in the current grid (weight: 32)
-% 5. Win the current grid (weight: 3 + 4 + 8 + 1 = 16)
-% 6. Avoid going on a grid where you need one extra move to win (weight: 3 + 4 + 1 = 8)
-% 7. Go on a grid where the other player never played (weight: 4)
-% 8. Play a "good" grid (based on its 'weight') (weight up to 3)
+% 1. Play a cell that makes you win the game (1024)
+% 2. (NOT IMPLEMENTED) Avoid enabling the other player to win the game (512)
+% 3. (NOT IMPLEMENTED) Play on a grid that if won, would make you win the game (256)
+% 4. Avoid going on a grid that has been won (weight : 128)
+% 5. Avoid going on a grid where the next player can win in one move  (64)
+% 6. Spoil a win in the current grid (32)
+% 7. Win the current grid (16)
+% 8. Avoid going on a grid where you need one extra move to win (8)
+% 9. Go on a grid where the other player never played (4)
+% 10. Play a "good" grid (based on its 'weight') (weight up to 3)
 
 nextMove(N, M, J) :- bestCell(N, M, J, _), !.
 bestCell(N, M, J, W) :- playableCell(N, M), cellWeight(N, M, J, W), not(biggerWeight(J, W)), !.
@@ -45,5 +47,7 @@ avoidWinWeight(_, _, 0).
 avoidWonWeight(M,128) :- fieldState(M, 0, _).
 avoidWonWeight(_,0).
 
-ultimateMoveWeight(N,M,J,256) :- isWinningMove(N,M,J),winFieldInOneMove(N,J,_).
+% TODO : Add the predicates that aren't implemented yet
+
+ultimateMoveWeight(N,M,J,1024) :- isWinningMove(N,M,J),winFieldInOneMove(N,J,_).
 ultimateMoveWeight(_,_,_,0).
