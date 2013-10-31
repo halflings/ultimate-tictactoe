@@ -1,21 +1,15 @@
-// Initialization
+// Initialization function
 SYMBOL = {1: 'X', 2: 'O', 0: '&nbsp;'}
-PLAYABLE = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-BOARD = [ [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]];
+initGame = function() {
+    PLAYABLE = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    BOARD = [ [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]];
+    STATE = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+    LAST_MOVE = {grid:-1, cell:-1, player:2};
 
-// BOARD = [ [1, 1, 1, 1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1, 1, 1, 1],
-//           [1, 1, 1, 1, 1, 1, 1, 1, 1], [1, 1, 1, 0, 0, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1, 1, 1, 1],
-//           [1, 1, 1, 1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1, 1, 1, 1]];
-
-// BOARD = [ [1, 1, 0, 0, 0, 0, 0, 0, 0], [1, 1, 0, 0, 0, 0, 0, 0, 0], [1, 1, 0, 0, 0, 0, 0, 0, 0],
-//                [1, 1, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 1, 0, 2, 2, 0], [1, 1, 0, 0, 0, 0, 0, 0, 0],
-//                [1, 1, 0, 0, 0, 0, 0, 0, 0], [1, 1, 0, 0, 0, 0, 0, 0, 0], [1, 1, 0, 0, 0, 0, 0, 0, 0] ]
-
-
-STATE = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-LAST_MOVE = {grid:-1, cell:-1, player:2};
+    updateGame();
+}
 
 checkWinner = function() {
     // Horizontal  
@@ -39,6 +33,7 @@ checkWinner = function() {
 
     return 0;
 }
+
 
 updateGame = function() {
     var next_player = LAST_MOVE.player;
@@ -88,7 +83,7 @@ updateGame = function() {
 } 
 
 $(document).ready(function() {
-    updateGame();
+    initGame();
 
     //Adding callbacks on cell clicks
     $('.gamefield > ul > li').click(function(event) {
@@ -107,12 +102,15 @@ $(document).ready(function() {
 
         updateGame();
 
+        // Fetching the currently active AI
+        var ai_type = $('#ai-choice').val()
 
         var sent_data = {
             board: BOARD,
             player: LAST_MOVE.player,
-            grid:grid.index() + 1,
-            cell:cell.index() + 1
+            grid: grid.index() + 1,
+            cell: cell.index() + 1,
+            ai: ai_type
           }
         console.log('Sending : ');
         console.log(sent_data);

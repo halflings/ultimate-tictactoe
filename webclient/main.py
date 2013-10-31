@@ -5,17 +5,14 @@ from subprocess import Popen, PIPE, STDOUT
 # Initializing the app
 app = Flask(__name__)
 
-def serialize_state(board, grid_n, cell_n, last_player):
+def ai_call(ai, board, grid_n, cell_n, last_player):
     ser = str()
-    ser += ":- ['ai1.pl'].\n"
+    ser += ":- ['{}'].\n".format(ai)
     ser += ':- asserta(gameField({})).\n'.format(json.dumps(board))
     ser += ':- asserta(lastMove({}, {}, {})).\n'.format(grid_n, cell_n, last_player)
 
-    return ser
-
-def ai_call(board, grid_n, cell_n, last_player):
     with open('../input.pl', 'w+') as input_file:
-        input_file.write(serialize_state(board, grid_n, cell_n, last_player))
+        input_file.write(ser)
 
     p = Popen(['prolog', '-q', '-s', '../main.pl'], stdin=PIPE, stdout=PIPE, stderr=STDOUT)
     output = p.communicate()
@@ -41,12 +38,13 @@ def play():
     player = int(data['player'])
     grid = int(data['grid'])
     cell = int(data['cell'])
+    ai = data['ai']
     board = data['board']
     board[grid - 1][cell - 1] = player
 
     # Calling the AI for the next move
     print 'Calling AI with :', board, grid, cell, player
-    resp = ai_call(board, grid, cell, last_player=player)
+    resp = ai_call(ai, board, grid, cell, last_player=player)
     
     return json.dumps(resp)
 

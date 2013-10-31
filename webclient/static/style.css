@@ -63,6 +63,35 @@ body {
     text-shadow: 1px 1px 0px rgba(80, 80, 200, 1);
 }
 
+#controls {
+    list-style: none;
+    text-align: center;
+    margin: 10px 0 0 0;
+}
+
+#controls > li {
+    display: inline-block;
+    margin: 0 10px;
+}
+
+#reset-game {
+    color: rgb(20, 50, 200);
+    text-decoration: none;
+}
+
+#reset-game:active {
+    color: rgb(200, 50, 50);
+}
+
+
+#ai-choice {
+    background: #FFF;
+    padding: 6px;
+    border-radius: 5px;
+    border: 1px solid rgb(200, 200, 200);
+    font-family: Ubuntu, sans-serif;
+}
+
 .gamefield > ul.won {
     color: #FFF;
     text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);

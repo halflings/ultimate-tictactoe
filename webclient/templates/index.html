@@ -17,6 +17,18 @@
     <div id="wrapper">
         <h1 class="gametitle">Ultimate tic-tac-toe</h1>
         <h2 class="instruction">Current player: <span class="player1 current-player">X</span>. Next: <span class="player2 next-player">O</span></h3>
+        <ul id="controls">
+            <li>
+                <a id="reset-game" href="#" onclick="javascript:initGame()">Reset the game</a>
+            </li>
+            <li>
+                <select id="ai-choice">
+                    <option value="ai1.pl">Global context</option>
+                    <option value="random.pl">Random</option>
+                </select>
+            </li>
+        </ul>    
+
 
         <div id="gameover">
             <h3 class="player1"> Player <b class="winner">X</b> won the game! </h3>
