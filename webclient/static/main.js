@@ -127,7 +127,12 @@ $(document).ready(function() {
         }
 
         // Updating the grid with the move that have been played and displaying it
-        LAST_MOVE.player = 3 - LAST_MOVE.player;
+        if (LAST_MOVE.player == -1) {
+            LAST_MOVE.player = 1;
+        }
+        else {
+            LAST_MOVE.player = 3 - LAST_MOVE.player;
+        }
         LAST_MOVE.grid = grid.index() + 1;
         LAST_MOVE.cell = cell.index() + 1;
         BOARD[grid.index()][cell.index()] = LAST_MOVE.player; 
