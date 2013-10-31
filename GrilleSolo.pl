@@ -20,7 +20,7 @@ won(_,_,_,_,_,_,_,_,_,[],0) :- !.
 /*W is the state of the grid N. 0 if it is not full and not won, 
 1 if won by player 1, 2 by player 2, 3 if full but not won
 V is the list of the winning cases*/
-gridState([A1,B2,C3,D4,E5,F6,G7,H8,I9],W,V):- won(A1,B2,C3,D4,E5,F6,G7,H8,I9,V,W),!.  %;full(G,W),W==3,!)
+gridState([A1,B2,C3,D4,E5,F6,G7,H8,I9],W,V):- won(A1,B2,C3,D4,E5,F6,G7,H8,I9,V,W),!. 
 cellValue(N, M, V) :- gameField(F), nth1(N, F, G), nth1(M, G, V), !.
 
 %Gives the state of the grid N in the gameField'
