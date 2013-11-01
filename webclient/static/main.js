@@ -8,6 +8,7 @@ initGame = function() {
     STATE = [0, 0, 0, 0, 0, 0, 0, 0, 0];
     LAST_MOVE = {grid:-1, cell:-1, player:-1};
 
+    $('#gamefield').removeAttr('class');
     $('#gameover').hide();
     updateGame();
 }
@@ -50,27 +51,27 @@ updateGame = function() {
         for (var j = 0; j < grid.length; j++) {
             cell_v = grid[j];
             cell_s = SYMBOL[cell_v];
-            $('.gamefield > ul:nth-child('+(i + 1)+') > li:nth-child('+(j + 1)+')').html(cell_s).removeAttr('class');
+            $('#gamefield > ul:nth-child('+(i + 1)+') > li:nth-child('+(j + 1)+')').html(cell_s).removeAttr('class');
         }
     }
 
     // Clearing all previous marking
-    $('.gamefield > ul').removeAttr('class');
+    $('#gamefield > ul').removeAttr('class');
     // Marking-up playable cells
     for (var i = 0; i < PLAYABLE.length; i++) {
-        $('.gamefield > ul:nth-child('+PLAYABLE[i]+')').addClass('playable');
+        $('#gamefield > ul:nth-child('+PLAYABLE[i]+')').addClass('playable');
     }
 
     // Applying grid states (won, etc.)
     for (var i = 0; i < STATE.length; i ++) {
         var grid_state = STATE[i];
         if (grid_state != 0) {
-            $('.gamefield > ul:nth-child('+(i + 1)+')').addClass('won player' + grid_state);
+            $('#gamefield > ul:nth-child('+(i + 1)+')').addClass('won player' + grid_state);
         }
     }
 
     // Marking-up the last move
-    $('.gamefield > ul:nth-child('+(LAST_MOVE.grid)+') > li:nth-child('+(LAST_MOVE.cell)+')').attr('class', 'last-move');
+    $('#gamefield > ul:nth-child('+(LAST_MOVE.grid)+') > li:nth-child('+(LAST_MOVE.cell)+')').attr('class', 'last-move');
 
 
     // Checking if the game ended
@@ -78,6 +79,7 @@ updateGame = function() {
 
     if (winner != 0) {
         $('.winner').text(SYMBOL[winner]);
+        $('#gamefield').attr('class', 'blurred');
         $('#gameover > h3').attr('class', 'player' + winner);
         $('#gameover').show();
     }
@@ -151,7 +153,7 @@ $(document).ready(function() {
     });
 
     //Adding callbacks on cell clicks
-    $('.gamefield > ul > li').click(function(event) {
+    $('#gamefield > ul > li').click(function(event) {
         var cell = $(event.target);
         var grid = cell.parent();
 

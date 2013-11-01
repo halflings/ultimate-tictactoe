@@ -18,6 +18,13 @@ a:active {
     color: rgb(200, 50, 50);
 }
 
+.blurred {
+    filter: blur(10px) brightness(1.1) opacity(0.7);
+    -webkit-filter: blur(10px) brightness(1.1) opacity(0.7);
+    -o-filter: blur(10px) brightness(1.1) opacity(0.7);
+    -ms-filter: blur(10px) brightness(1.1) opacity(0.7);
+    -moz-filter: blur(10px) brightness(1.1) opacity(0.7);
+}
 #wrapper {
     width: 700px;
     margin: 0 auto;
@@ -38,13 +45,13 @@ a:active {
     margin: 3px;
 }
 
-.gamefield {
+#gamefield {
     display: block;
     margin: 10px 0;
     font-size: 0;
 }
 
-.gamefield > ul {
+#gamefield > ul {
     width: 30%;
     margin: 4px;
     display: inline-block;
@@ -59,8 +66,8 @@ a:active {
     height: 100%;
     width: 100%;
     z-index: 3;
-    background: rgba(255, 255, 255, 0.5);
-    box-shadow: 0px 0px 80px 30px rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0px 0px 80px 30px rgba(255, 255, 255, 0.2);
 }
 
 #gameover > h3 {
@@ -91,7 +98,7 @@ a:active {
     font-family: Ubuntu, sans-serif;
 }
 
-.gamefield > ul.won {
+#gamefield > ul.won {
     color: #FFF;
     text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
 }
@@ -99,7 +106,7 @@ a:active {
 .player1 {
     color: rgb(94, 203, 255);
 }
-.gamefield > ul.won.player1 > li{
+#gamefield > ul.won.player1 > li{
     background: rgba(94, 203, 255, 0.8);
 }
 
@@ -108,17 +115,17 @@ a:active {
     color: rgb(255, 100, 94);
 }
 
-.gamefield > ul.won.player2 > li{
+#gamefield > ul.won.player2 > li{
     background: rgba(255, 100, 94, 0.8);
 }
 
 /* Player 3 = tie */
-.gamefield > ul.won.player3 > li{
+#gamefield > ul.won.player3 > li{
     background: #737373;
 }
 
 
-.gamefield > ul > li {
+#gamefield > ul > li {
     width: 32%;
     text-align: center;
     font-size: 35pt;
@@ -126,7 +133,7 @@ a:active {
     display: inline-block;
     border: 1px solid rgba(0, 0, 0, 0.1);
     background: rgb(255,255,255);
-    opacity: 0.3;
+    opacity: 0.8;
 
     /* Making the 'li' element unselectable, just in case*/
    -moz-user-select: -moz-none;
@@ -137,11 +144,31 @@ a:active {
 
 }
 
-.gamefield > ul.playable > li {
+#gamefield > ul {
+    opacit: 0.5;
+    filter: blur(3px);
+    -webkit-filter: blur(3px);
+    -o-filter: blur(3px);
+    -ms-filter: blur(3px);
+    -moz-filter: blur(3px);
+}
+
+#gamefield > ul.playable {
+    filter: initial;
+    -webkit-filter: initial;
+    -o-filter: initial;
+    -ms-filter: initial;
+    -moz-filter: initial;
+
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+}
+
+
+#gamefield > ul.playable > li {
     opacity: 1;
     border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
-.gamefield > ul > li.last-move  {
+#gamefield > ul > li.last-move  {
     opacity: 1;
 }
