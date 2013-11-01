@@ -144,8 +144,8 @@ a:active {
 
 }
 
-#gamefield > ul {
-    opacit: 0.5;
+#gamefield > ul > li {
+    opacity: 0.5;
     filter: blur(3px);
     -webkit-filter: blur(3px);
     -o-filter: blur(3px);
@@ -153,22 +153,17 @@ a:active {
     -moz-filter: blur(3px);
 }
 
-#gamefield > ul.playable {
+#gamefield > ul.playable > li, #gamefield > ul > li.last-move {
     filter: initial;
     -webkit-filter: initial;
     -o-filter: initial;
     -ms-filter: initial;
     -moz-filter: initial;
-
+    opacity: 1;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
 }
 
 
 #gamefield > ul.playable > li {
-    opacity: 1;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-}
 
-#gamefield > ul > li.last-move  {
-    opacity: 1;
 }
