@@ -23,11 +23,11 @@ bestCell(N, M, J, W) :- playableCell(N, M), cellWeight(N, M, J, W), not(biggerWe
 biggerWeight(J, W) :- playableCell(XN, XM), cellWeight(XN, XM, J, XW), XW > W.
 
 cellWeight(N, M, J, W) :- baseWeight(M, W10), emptyGridWeight(M, J, W9), avoidSpoiledWinWeight(M, J, W8),
-    winWeight(N, M, J, W7), spoilWinWeight(N, M, J, W6), avoidWinWeight(M, J, W5), avoidWonWeight(M, W4),
-    isWinningGrid(M, J, W3), avoidLosingGame(M, J, W2),  winGameIfPlay(N,M,J,W1),
+    winWeight(N, M, J, W7), spoilWinWeight(N, M, J, W6), avoidWinWeight(M, J, W5), W4 is 0,
+    W3 is 0, W2 is 0,  W1 is 0,
   	W is W1 + W2 + W3 + W4 + W5 + W6 + W7 + W8 + W9 + W10, !.
 
-baseWeight(M, 3) :- member(M, [1,3,7,9]).
+baseWeight(M, 4) :- member(M, [1,3,7,9]).
 baseWeight(M, 2) :- member(M, [2,4,6,8]).
 baseWeight(5, 1).
 
