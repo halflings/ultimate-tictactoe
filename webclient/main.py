@@ -15,16 +15,23 @@ def ai_call(ai, board, grid_n, cell_n, last_player):
         input_file.write(ser)
 
     p = Popen(['prolog', '-q', '-s', '../main.pl'], stdin=PIPE, stdout=PIPE, stderr=STDOUT)
-    output = p.communicate()
-    print "OUTPUT = ", output[0].strip()
-    output_tokens = output[0].strip().split(' ')
-    board = json.loads(output_tokens[0])
-    playable_grids = json.loads(output_tokens[1])
-    state = json.loads(output_tokens[2])
-    last = json.loads(output_tokens[3])
-    last_move = dict(grid=last[0], cell=last[1], player=last[2])
-    return dict(board=board, playable=playable_grids, state=state, last_move=last_move)
+    raw_output = p.communicate()
+    output = raw_output[0].strip()
+    output_tokens = output.split(' ')
 
+    try:
+        board = json.loads(output_tokens[0])
+        playable_grids = json.loads(output_tokens[1])
+        state = json.loads(output_tokens[2])
+        last = json.loads(output_tokens[3])
+        last_move = dict(grid=last[0], cell=last[1], player=last[2])
+        return dict(board=board, playable=playable_grids, state=state, last_move=last_move)
+    except ValueError as e:
+        print "OUTPUT =\n{}\n".format(output)
+        raise e
+
+def nextPlayer(player):
+    return 1 if player == 2 or player == -1 else 2
 
 @app.route("/")
 def index():
@@ -39,13 +46,28 @@ def play():
     grid = int(data['grid'])
     cell = int(data['cell'])
     ai = data['ai']
+    finish_game = data['finish_game']
     board = data['board']
     board[grid - 1][cell - 1] = player
 
-    # Calling the AI for the next move
-    print 'Calling AI with :', board, grid, cell, player
-    resp = ai_call(ai, board, grid, cell, last_player=player)
-    
+
+    if not finish_game:
+        # Calling the AI for one move
+        player_ai = ai[str(nextPlayer(player))]
+        resp = ai_call(player_ai, board, grid, cell, last_player=player)
+    else:
+        # Calling the AI until the game is over
+        playing = True
+        while playing:
+            player_ai = ai[str(nextPlayer(player))]
+            resp = ai_call(player_ai, board, grid, cell, last_player=player)
+
+            board = resp['board']
+            grid, cell, player = resp['last_move']['grid'], resp['last_move']['cell'], resp['last_move']['player']
+
+            playing = len(resp['playable']) != 0
+
+
     return json.dumps(resp)
 
 if __name__ == "__main__":

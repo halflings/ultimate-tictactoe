@@ -92,18 +92,20 @@ nextPlayer = function() {
     }
 }
 
-aiCall = function() {
+aiCall = function(finish_game) {
+    finish_game = typeof finish_game !== 'undefined' ? finish_game : false;
+
     // Fetching the currently active AI
-    var ai_type = $('#ai' + nextPlayer()).val()
+    var ai_types = {'1': $('#ai1').val(), '2': $('#ai2').val()};
+
     var sent_data = {
         board: BOARD,
         player: LAST_MOVE.player,
         grid: LAST_MOVE.grid,
         cell: LAST_MOVE.cell,
-        ai: ai_type
-      }
-    console.log('Sending : ');
-    console.log(sent_data);
+        ai: ai_types,
+        finish_game: finish_game
+    }
 
     $.ajax({
       url: "/play",
@@ -112,30 +114,21 @@ aiCall = function() {
       data: JSON.stringify(sent_data),
       dataType: "json",
       success: function (data) {
-            console.log('RECEIVED : ');
-            console.log(data);
-
             PLAYABLE = data.playable;
             STATE = data.state;
             BOARD = data.board;
             LAST_MOVE = data.last_move;
-
       }
     });
 }
 
-aiMove = function() {
-    aiCall();
+aiMove = function(finish_game) {
+    aiCall(finish_game);
     updateGame();
 }
 
 finishGame = function() {
-
-    while (checkWinner() == 0 && PLAYABLE.length != 0) {
-        aiCall();
-    }
-
-    updateGame();
+    aiMove(true);
 }
 
 $(document).ready(function() {
