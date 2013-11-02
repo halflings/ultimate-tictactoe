@@ -51,3 +51,10 @@ avoidWonWeight(_,0).
 
 ultimateMoveWeight(N,M,J,1024) :- isWinningMove(N,M,J),winFieldInOneMove(N,J,_).
 ultimateMoveWeight(_,_,_,0).
+
+%not Interface tested
+winGameIfPlay(N,M,J,1024) :- getGridsState([X1,X2,X3,X4,X5,X6,X7,X8,X9]), isWinning(J,X1,X2,X3,X4,X5,X6,X7,X8,X9,N), isWinningMove(N,M,J).
+winGameIfPlay(_,_,_,0).
+
+%not yet tested
+isWinningGrid(N,J,256) : - getGridsState([X1,X2,X3,X4,X5,X6,X7,X8,X9]), isWinning(J,X1,X2,X3,X4,X5,X6,X7,X8,X9,N).
