@@ -37,35 +37,19 @@ def nextPlayer(player):
 def index():
     return render_template('index.html')
 
-<<<<<<< HEAD
 def gameWon(state): #true if a player has won
     # Horizontal  
     for i in range(0,len(state),3):
         if (state[i] != 3 and state[i]!=0 and state[i] == state[i+1] and state[i+1] == state[i+2]):
-=======
-def testWonGame(state): #true if a player has won
-    # Horizontal  
-    for i in range(0,len(state),3):
-        if (state[i] != 3 and state[i]!=0 and state[i] == state[i+1] and state[i+1] == state[i+2]):
-            print "horizontal"
->>>>>>> 7c81f604b7838b6b081381fbd2fedf61ddafd222
             return True
 
     # Vertical
     for i in range(0,3):
         if (state[i] != 3  and state[i]!=0 and state[i] == state[i+3] and state[i+3] == state[i+6]) :
-<<<<<<< HEAD
-=======
-            print "vertical"
->>>>>>> 7c81f604b7838b6b081381fbd2fedf61ddafd222
             return True
         
     # Diagonal
     if ((state[0] != 3 and state[0] == state[4] and state[4] == state[8]) or (state[2] != 3 and state[2] == state[4] and state[4] == state[6])):
-<<<<<<< HEAD
-=======
-        print "diagonal"
->>>>>>> 7c81f604b7838b6b081381fbd2fedf61ddafd222
         return state[4]>0
 
     return False
@@ -99,12 +83,7 @@ def play():
             grid, cell, player = resp['last_move']['grid'], resp['last_move']['cell'], resp['last_move']['player']
 
             # playing = len(resp['playable']) != 0
-<<<<<<< HEAD
             playing = not gameWon(resp['state']) and len(resp['playable']) != 0
-=======
-            playing = (not(testWonGame(resp['state'])) and  len(resp['playable']) != 0)
-            print playing
->>>>>>> 7c81f604b7838b6b081381fbd2fedf61ddafd222
 
     return json.dumps(resp)
 
