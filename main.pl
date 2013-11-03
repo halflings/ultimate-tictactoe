@@ -1,7 +1,9 @@
 :- ['GrilleSolo.pl'].
 :- ['Champ.pl'].
 :- ['input.pl'].
+:- ['learning.pl'].
 
+:- asserta(stateQueue(2,2,3,[a,b])).
 /*Miscellaneous functions*/
 
 /*Replaces element at index I (index starts at 1)*/
@@ -43,10 +45,39 @@ playMove(N,M,J) :- gameField(D), nth1(N,D,G), nth1(M,G,0), /*checks that locatio
 					replace(G,M,J,NewG),replace(D,N,NewG,NewD), retract(gameField(D)), assert(gameField(NewD)), /*updates grid*/
 					lastMove(A,B,C), retract(lastMove(A,B,C)), asserta(lastMove(N,M,J)).  /*updates lastMove*/
 
+
+
+%register
+%isLost(J,C,G,GF).
+symetricGrid([],[]).
+symetricGrid([0|Q],[0|Q2]):-symetricGrid(Q,Q2),!.
+symetricGrid([T|Q],[T2|Q2]):- T2 is 3-T,T is 3-T2, symetricGrid(Q,Q2),!.
+
+symetricField([X1,X2,X3,X4,X5,X6,X7,X8,X9], [XS1,XS2,XS3,XS4,XS5,XS6,XS7,XS8,XS9]):-symetricGrid(X1,XS1),symetricGrid(X2,XS2),symetricGrid(X3,XS3),symetricGrid(X4,XS4),symetricGrid(X5,XS5),
+												symetricGrid(X6,XS6),symetricGrid(X7,XS7),symetricGrid(X8,XS8),symetricGrid(X9,XS9),!.
+
+
+ended(J,[X1,X2,X3,X4,X5,X6,X7,X8,X9]):- stateQueue(JF,NF,MF,GF), !,%Load or saved State, and check if we are not the player who has possibly won.
+									won(X1,X2,X3,X4,X5,X6,X7,X8,X9,X,J),!, X\==[], % We check if th eplayer J has won.
+
+									not(isLost(JF,NF,MF,GF)), %We check if we have already learned this. If not, we continue
+											open('../learning.pl',append,Stream),%We open the file 'learning.pl' with append parameter ( add strings after existing strings in file)
+											write(Stream,'isLost('),write(Stream,JF),write(Stream,','),write(Stream,NF), 
+											write(Stream,','), write(Stream,MF), write(Stream,','), write(Stream,GF),
+											write(Stream,').'),nl(Stream), % we write our first 'isLost(JF,NF,MF,GF).''
+											JFS is 3- JF, symetricField(GF,GFS),%We calculate the symetric configuration.
+												write(Stream,'isLost('),write(Stream,JFS),write(Stream,','),write(Stream,NF), 	write(Stream,','), write(Stream,MF), 
+											write(Stream,','), write(Stream,GFS),write(Stream,').'),nl(Stream),%We write the symetric configuration
+											close(Stream),['learning.pl']. %Close the stream, and reload learning.pl to be aware of the new clauses.
+
+
 /********************/
 /* EXECUTION BLOCK */
 
 /* The AI plays its move*/
-:- nextPlayer(J), nextMove(N,M,J), !, playMove(N,M,J). 
+:- nextPlayer(J), nextMove(N,M,J),lastMove(NLM,MLM,JLM),(NLM \== -1,stateQueue(JF,NF,MF,GF), 
+					retract(stateQueue(JF,NF,MF,GF)), gameField(G),nth1(NLM,G,R1), replace(R1,MLM,0,XNew), replace(G,NLM,XNew,GFinal),
+					asserta(stateQueue(JLM,NLM,MLM,GFinal)), !, playMove(N,M,J) ; ! ,playMove(N,M,J)).%, write(D).  gameField(D),
 /* Prints the result on screen: "gamefield[space]allowed_grids[space]grids_state[space]last_move" */
-:- printTotalState.
+ :- getGridsState(Ch), lastMove(_,_,J), (ended(J,Ch);J==J).
+ :- printTotalState.
