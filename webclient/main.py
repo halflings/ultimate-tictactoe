@@ -37,6 +37,23 @@ def nextPlayer(player):
 def index():
     return render_template('index.html')
 
+def gameWon(state): #true if a player has won
+    # Horizontal  
+    for i in range(0,len(state),3):
+        if (state[i] != 3 and state[i]!=0 and state[i] == state[i+1] and state[i+1] == state[i+2]):
+            return True
+
+    # Vertical
+    for i in range(0,3):
+        if (state[i] != 3  and state[i]!=0 and state[i] == state[i+3] and state[i+3] == state[i+6]) :
+            return True
+        
+    # Diagonal
+    if ((state[0] != 3 and state[0] == state[4] and state[4] == state[8]) or (state[2] != 3 and state[2] == state[4] and state[4] == state[6])):
+        return state[4]>0
+
+    return False
+
 @app.route("/play", methods=["POST"])
 def play():
     data = json.loads(request.form.keys()[0])
@@ -51,7 +68,7 @@ def play():
     board[grid - 1][cell - 1] = player
 
 
-    if not finish_game:
+    if (not (finish_game)):
         # Calling the AI for one move
         player_ai = ai[str(nextPlayer(player))]
         resp = ai_call(player_ai, board, grid, cell, last_player=player)
@@ -65,8 +82,8 @@ def play():
             board = resp['board']
             grid, cell, player = resp['last_move']['grid'], resp['last_move']['cell'], resp['last_move']['player']
 
-            playing = len(resp['playable']) != 0
-
+            # playing = len(resp['playable']) != 0
+            playing = not gameWon(resp['state']) and len(resp['playable']) != 0
 
     return json.dumps(resp)
 
