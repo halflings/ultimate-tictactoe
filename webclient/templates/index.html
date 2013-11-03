@@ -17,7 +17,7 @@
 
     <div id="wrapper">
         <h1 class="gametitle"><i class="fa fa-flash"></i> Ultimate tic-tac-toe</h1>
-        <h2 class="instruction">Current player: <span class="player1 current-player">X</span>. Next: <span class="player2 next-player">O</span></h3>
+        <h2 class="instruction">Current player: <span id="current-player">X</span>. Next: <span id="next-player">O</span></h3>
         
         <ul class="controls">
 
@@ -25,8 +25,10 @@
 
             <li>
                 <select id="ai1" class="ai-choice">
-                    <option value="ai1.pl">Priority-based</option>
-                    <option value="test-ai.pl">Test AI</option>
+                    <option value="hybrid.pl">Hybrid</option>
+                    <option value="agressive.pl">Agressive</option>
+                    <option value="defensive.pl">Defensive</option>
+                    <option value="local.pl">Local</option>
                     <option value="random-ai.pl">Random</option>
                 </select>
             </li>
@@ -36,8 +38,10 @@
 
             <li>
                 <select id="ai2" class="ai-choice">
-                    <option value="ai1.pl">Priority-based</option>
-                    <option value="test-ai.pl">Test AI</option>
+                    <option value="hybrid.pl">Hybrid</option>
+                    <option value="agressive.pl">Agressive</option>
+                    <option value="defensive.pl">Defensive</option>
+                    <option value="local.pl">Local</option>
                     <option value="random-ai.pl">Random</option>
                 </select>
             </li>
@@ -47,7 +51,13 @@
         <ul class="controls">
             <li>
                 <a href="#" onclick="javascript:initGame()">
-                    <i class="fa fa-refresh"></i> <b>R</b>eset the game
+                    <i class="fa fa-refresh"></i> <b>C</b>lear the game
+                </a>
+            </li>
+
+            <li>
+                <a href="#" onclick="javascript:randomGame()">
+                    <i class="fa fa-random"></i> <b>R</b>andom game
                 </a>
             </li>
 

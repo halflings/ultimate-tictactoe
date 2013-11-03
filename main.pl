@@ -12,10 +12,9 @@ zeroesPos(L1,L2) :- zeroesPos1(L1,1,[],L2).
 zeroesPos1([],_,L,L).
 zeroesPos1([H|T],I,L,X) :- H = 0,  I1 is I+1, zeroesPos1(T,I1,[I|L],X).
 zeroesPos1([H|T],I,L,X) :- H \= 0, I1 is I+1, zeroesPos1(T,I1,L,X).
-/*Print functions*/
-printGameField :- gameField(D), print(D).
-printLastMove :- lastMove(X,Y,Z), print(X), print(','), print(Y), print(', joueur '), print(Z).
-printGridState :- gridsState(G), print(G).
+/*Print function*/
+printTotalState :- gameField(Ch), getGridsState(X), allowedGrids(Allowed,X), Last = [N, M, J], lastMove(N, M, J),
+   print(Ch), print(' '), print(Allowed), print(' '), print(X), print(' '), print(Last). 
 
 /*****************/
 /* MAIN FUNCTIONS*/
@@ -50,5 +49,4 @@ playMove(N,M,J) :- gameField(D), nth1(N,D,G), nth1(M,G,0), /*checks that locatio
 /* The AI plays its move*/
 :- nextPlayer(J), nextMove(N,M,J), !, playMove(N,M,J). 
 /* Prints the result on screen: "gamefield[space]allowed_grids[space]grids_state[space]last_move" */
-:- gameField(Ch), getGridsState(X), allowedGrids(Allowed,X), Last = [N, M, J], lastMove(N, M, J),
-   print(Ch), print(' '), print(Allowed), print(' '), print(X), print(' '), print(Last). 
+:- printTotalState.

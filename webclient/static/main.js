@@ -13,6 +13,40 @@ initGame = function() {
     updateGame();
 }
 
+randomGame = function() {
+    initGame();
+
+    for (var i = 0; i < 9; i++) {
+        for (var j = 0; j < 1; j++) {
+            var cell = Math.floor(Math.random() * 9);
+            var value = 1 + Math.floor(Math.random() * 2);
+            BOARD[i][cell] = value;
+        }
+    }
+
+    LAST_MOVE.grid = 9;
+    LAST_MOVE.cell = cell + 1;
+    LAST_MOVE.player =  1 + Math.floor(Math.random() * 2);
+
+    updateGame();
+}
+
+countWins = function (n) {
+    var winCounter = {1: 0, 2: 0, 0: 0};
+
+    for (var i = 0; i < n; i++) {
+        randomGame();
+        aiMove(true);
+        console.log(i + ' '  + checkWinner());
+        console.log(winCounter);
+        winCounter[checkWinner()] += 1;
+    }
+
+    console.log(winCounter);
+
+    return winCounter;
+}
+
 checkWinner = function() {
     // Horizontal  
     for (var i = 0; i < STATE.length; i+= 3) {
@@ -38,12 +72,15 @@ checkWinner = function() {
 
 
 updateGame = function() {
-    var next_player = LAST_MOVE.player;
-    var current_player = 3 - next_player;
+    var next_player = 3 - nextPlayer();
+    var current_player = nextPlayer();
 
     // Displaying the current player
-    $('.current-player').text(SYMBOL[current_player]);
-    $('.next-player').text(SYMBOL[next_player]);
+    $('#current-player').text(SYMBOL[current_player]);
+    $('#current-player').attr('class', 'player' + current_player);
+
+    $('#next-player').text(SYMBOL[next_player]);
+    $('#next-player').attr('class', 'player' + next_player);
 
     // Filling the grids
     for(var i = 0; i < BOARD.length; i++) {
@@ -142,13 +179,17 @@ $(document).ready(function() {
         {
             aiMove();
         }
-        else if (e.which == 'r'.charCodeAt(0) || e.which == 'R'.charCodeAt(0) ) 
+        else if (e.which == 'c'.charCodeAt(0) || e.which == 'C'.charCodeAt(0) ) 
         {
             initGame();
         }
         else if (e.which == 'f'.charCodeAt(0) || e.which == 'F'.charCodeAt(0) ) 
         {
             finishGame();
+        }
+        else if (e.which == 'r'.charCodeAt(0) || e.which == 'R'.charCodeAt(0) ) 
+        {
+            randomGame();
         }
     });
 

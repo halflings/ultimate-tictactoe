@@ -18,16 +18,7 @@ winnableGridExists(J) :- member(N, [1,2,3,4,5,6,7,8,9]), fieldState(N, NS, _), N
 % 9. Go on a grid where the other player never played (4)
 % 10. Play a "good" grid (based on its 'weight') (weight up to 3)
 
-nextMove(N, M, J) :- bestCell(N, M, J, _), !.
-bestCell(N, M, J, W) :- playableCell(N, M), cellWeight(N, M, J, W), not(biggerWeight(J, W)), !.
-biggerWeight(J, W) :- playableCell(XN, XM), cellWeight(XN, XM, J, XW), XW > W.
-
-cellWeight(N, M, J, W) :- baseWeight(M, W10), emptyGridWeight(M, J, W9), avoidSpoiledWinWeight(M, J, W8),
-    winWeight(N, M, J, W7), spoilWinWeight(N, M, J, W6), avoidWinWeight(M, J, W5), W4 is 0,
-    W3 is 0, W2 is 0,  W1 is 0,
-  	W is W1 + W2 + W3 + W4 + W5 + W6 + W7 + W8 + W9 + W10, !.
-
-baseWeight(M, 4) :- member(M, [1,3,7,9]).
+baseWeight(M, 3) :- member(M, [1,3,7,9]).
 baseWeight(M, 2) :- member(M, [2,4,6,8]).
 baseWeight(5, 1).
 
@@ -49,8 +40,6 @@ avoidWinWeight(_, _, 0).
 % TODO : Fix fieldState
 avoidWonWeight(M,128) :- fieldState(M, S, _), S = 0.
 avoidWonWeight(_,0).
-
-% TODO : Add the predicates that aren't implemented yet (2 and 3)
 
 % Not yet tested
 isWinningGrid(N, J, 256) :- getGridsState([X1,X2,X3,X4,X5,X6,X7,X8,X9]), isWinning(J,X1,X2,X3,X4,X5,X6,X7,X8,X9,N).
